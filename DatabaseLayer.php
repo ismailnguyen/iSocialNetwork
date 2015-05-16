@@ -1,4 +1,4 @@
-<?php{
+<?php
 /* @File: databaseLayer.php
  *
  *              --- API iSocialNetwork ---
@@ -7,7 +7,8 @@
  *
  *               ESGI - 3A AL - 2014/2015
  */
-require_once 'Conf.inc.php';
+ 
+include("Conf.inc.php");
 
 class DatabaseLayer
 {
@@ -18,8 +19,9 @@ class DatabaseLayer
     {
         try
         {
-            $this->m_pdo = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME, DB_USER, DB_PASSWORD);
-            $this->m_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            //$this->m_pdo = new PDO('mysql:host="'.DB_HOST.'";dbname="'.DB_NAME.'"', DB_USER, DB_PASSWORD);
+            $this->m_pdo = new PDO('mysql:host=localhost;dbname=myDB', 'root', '');
+			$this->m_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
         catch(PDOException $e)
         {
@@ -29,8 +31,8 @@ class DatabaseLayer
 
     private function __destruct()
     {
-        unset($this->m_instance);
-        $this->m_pdo = null; // Closing PDO connection
+        //unset($this->m_instance);
+        //$this->m_pdo = null; // Closing PDO connection
     }
 
     private function __clone()

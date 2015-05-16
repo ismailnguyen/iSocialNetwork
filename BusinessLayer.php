@@ -7,8 +7,8 @@
  *
  *               ESGI - 3A AL - 2014/2015
  */
-
-require_once 'DatabaseLayer.php';
+ 
+include("DatabaseLayer.php");
 
 class BusinessLayer
 {
@@ -28,7 +28,7 @@ class BusinessLayer
         
         $this->setRequest();
         
-        $this->m_output = (isset($this->getRequest("output")) && $this->getRequest("output") == "xml") ? "xml" : "json";
+        $this->m_output = ($this->getRequest("output") != null && $this->getRequest("output") == "xml") ? "xml" : "json";
         
         if($_useToken && !checkToken($this->getRequest("token")))
         {
@@ -42,7 +42,7 @@ class BusinessLayer
       }
       catch(Exception $e)
       {
-        echo $e->getMessage();
+		$this->addData(array("error" => $e->getMessage()));
         $this->setCode(39); // Service unavailable
         $this->response();
       }
@@ -58,7 +58,7 @@ class BusinessLayer
         return hash('sha256', $_id.TOKEN_KEY);
     }
 
-    public function checkToken(String token)
+    public function checkToken(String $token)
     {
         if($this->getToken($this->getRequest("idUser")) == token)
             return true;
@@ -130,7 +130,7 @@ class BusinessLayer
                   		    3 => array('code' => 200, 'status' => 'OK'),
                   		    4 => array('code' => 201, 'status' => 'Created'),
                   		    5 => array('code' => 202, 'status' => 'Accepted'),
-                  		    6 => array('code' => 203, 'status' => 'Non-Authoritative Information',)
+                  		    6 => array('code' => 203, 'status' => 'Non-Authoritative Information'),
                   		    7 => array('code' => 204, 'status' => 'No Content'),
                   		    8 => array('code' => 205, 'status' => 'Reset Content'),
                   		    9 => array('code' => 206, 'status' => 'Partial Content'),

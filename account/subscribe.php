@@ -8,7 +8,7 @@
  *               ESGI - 3A AL - 2014/2015
  */
 
-require_once 'BusinessLayer.php';
+require_once '../BusinessLayer.php';
 
 class AccountSubscribe extends BusinessLayer
 {
