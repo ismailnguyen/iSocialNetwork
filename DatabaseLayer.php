@@ -19,20 +19,14 @@ class DatabaseLayer
     {
         try
         {
-            //$this->m_pdo = new PDO('mysql:host="'.DB_HOST.'";dbname="'.DB_NAME.'"', DB_USER, DB_PASSWORD);
-            $this->m_pdo = new PDO('mysql:host=localhost;dbname=myDB', 'root', '');
+            $this->m_pdo = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME, DB_USER, DB_PASSWORD);
+            //$this->m_pdo = new PDO('mysql:host=localhost;dbname=myDB', 'root', '');
 			$this->m_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
         catch(PDOException $e)
         {
             throw new Exception('PDO Error: '.$e->getMessage());
         }
-    }
-
-    private function __destruct()
-    {
-        //unset($this->m_instance);
-        //$this->m_pdo = null; // Closing PDO connection
     }
 
     private function __clone()

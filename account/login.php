@@ -21,7 +21,7 @@ class AccountLogin extends BusinessLayer
 	{
 		try
 		{
-			if(getMethod() == "POST")
+			if($this->getMethod() == "POST")
 	    	{
 				$_email = getRequest("email");
 			 	$_password = hash(getRequest("password")); //do not forget to hash password before saving !
@@ -35,8 +35,9 @@ class AccountLogin extends BusinessLayer
 				if($statement->execute($params))
 				{
 					$result = $statement->fetch();
-				  
-          			$this->addData(array("idUser" => $result['id'], "token" => getToken($result['id'])));
+
+          			$this->addData(array("idUser" => $result['id'],
+											"token" => getToken($result['id'])));
 				}
 				else
 				{
@@ -49,13 +50,12 @@ class AccountLogin extends BusinessLayer
 			}
 		}
 		catch(PDOException $e)
-    {
-        $this->setCode(36); //Server error
-    }
+		{
+			$this->setCode(36); //Server error
+		}
 		finally
 		{
 			$this->response();
-			unset($m_db);
 		}
 	}
 }

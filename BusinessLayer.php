@@ -22,30 +22,30 @@ class BusinessLayer
 
     public function __construct($_useToken=true)
     {
-      try
-      {
-        $this->m_db = DatabaseLayer::getInstance()->getPDO();
-        
-        $this->setRequest();
-        
-        $this->m_output = ($this->getRequest("output") != null && $this->getRequest("output") == "xml") ? "xml" : "json";
-        
-        if($_useToken && !checkToken($this->getRequest("token")))
-        {
-          $this->setCode(30); // Invalid token !
-          $this->response();
-        }
-		else
+		try
 		{
-			$this->m_idUser = $this->getRequest("idUser");
+			$this->m_db = DatabaseLayer::getInstance()->getPDO();
+
+			$this->setRequest();
+
+			$this->m_output = ($this->getRequest("output") != null && $this->getRequest("output") == "xml") ? "xml" : "json";
+
+			if($_useToken && !checkToken($this->getRequest("token")))
+			{
+				$this->setCode(30); // Invalid token !
+				$this->response();
+			}
+			else
+			{
+				$this->m_idUser = $this->getRequest("idUser");
+			}
 		}
-      }
-      catch(Exception $e)
-      {
-		$this->addData(array("error" => $e->getMessage()));
-        $this->setCode(39); // Service unavailable
-        $this->response();
-      }
+		catch(Exception $e)
+		{
+			$this->addData(array("error" => $e->getMessage()));
+			$this->setCode(39); // Service unavailable
+			$this->response();
+		}
     }
 	
 	public function getIdUser()
@@ -66,9 +66,14 @@ class BusinessLayer
         return false;
     }
 
-	public function addData($data)
+	public function addData($_data)
 	{
-		$this->m_data[] = $data;
+		//array_push($this->m_data, $data);
+		
+		foreach($_data as $_key => $_value)
+		{
+			$this->$m_data[$_key] = $_value;
+		}
 	}
 
 	public function getMethod()
@@ -80,40 +85,51 @@ class BusinessLayer
 	{
 		try
 		{
-			return mysql_real_escape_string(/*htmlentities(*/$this->$m_request[$key]/*)*/);
+			return (array_key_exists($key, $this->m_request)) ? htmlentities($this->m_request[$key]) : null;
 		}
 		catch(Exception $e)
 		{
-			echo $e->getMessage();
-        	$this->setCode(18); // Bad Request
-        	$this->response();
+			throw new Exception($e->getMessage());
+			//$this->addData(array("error" => $e->getMessage()));
+        	//$this->setCode(18); // Bad Request
+        	//$this->response();
 		}
 	}
 
 	//get each POST, GET, PUT, DELETE and put it in $m_request like 'request_key => request_value'
 	private function setRequest()
 	{
-		$this->m_request[] = array("method" => $_SERVER['REQUEST_METHOD']);
-
-		switch($this->m_request["method"])
+		try
 		{
-			case "POST":
-				$_method = $_POST; //&$_POST
-				break;
-			case "GET":
-				$_method = $_GET; //&$_GET
-				break;
-			case "PUT":
-				$_method = $_PUT; //&$_PUT
-				break;
-			case "DELETE":
-				$_method = $_DELETE; //&$_DELETE
-				break;
+			$this->m_request["method"] = $_SERVER['REQUEST_METHOD'];
+			//var_dump($this->m_request); // trick to show whole request content
+			
+			switch($this->m_request["method"])
+			{
+				case "POST":
+					$_method = $_POST; //&$_POST
+					break;
+				case "GET":
+					$_method = $_GET; //&$_GET
+					break;
+				case "PUT":
+					$_method = $_PUT; //&$_PUT
+					break;
+				case "DELETE":
+					$_method = $_DELETE; //&$_DELETE
+					break;
+			}
+
+			foreach($_method as $_key => $_value)
+			{
+				$this->m_request[$_key] = $_value;
+			}
 		}
-
-		foreach($_method as $_key => $_value)
+		catch(Exception $e)
 		{
-			$this->m_request[] = array($_key => $_value);
+			$this->addData(array("error" => $e->getMessage()));
+        	$this->setCode(18); // Bad Request
+        	$this->response();
 		}
 	}
 
@@ -178,47 +194,61 @@ class BusinessLayer
   		  header("HTTP/1.1 ".$this->getError('code')." ".$this->getError('status'));
   			header('Content-type: text/xml');
   			
+			echo '<?xml version="1.0"?>';
+			
+			echo '<xml>';
+			
   			echo '<code>';
   			echo $this->m_code;
   			echo '</code>';
   			
   			echo '<result>';
-  			
-  			foreach($this->m_data as $index => $post)
+			
+			if($this->m_data != null)
   			{
-  				if(is_array($post))
-  				{
-  					foreach($post as $key => $value)
-  					{
-  						echo '<'.$key.'>';
-  						
-  						if(is_array($value))
-  						{
-  							foreach($value as $tag => $val)
-  							{
-  								echo '<'.$tag.'>'.htmlentities($val).'</'.$tag.'>';
-  							}
-  						}
-  						else
-  						{
-  						  echo htmlentities($value);
-  						}
-  						
-  						echo '</'.$key.'>';
-  					}
-  				}
-  			}
+				foreach($this->m_data as $index => $post)
+				{
+					if(is_array($post))
+					{
+						foreach($post as $key => $value)
+						{
+							echo '<'.$key.'>';
+							
+							if(is_array($value))
+							{
+								foreach($value as $tag => $val)
+								{
+									echo '<'.$tag.'>'.htmlentities($val).'</'.$tag.'>';
+								}
+							}
+							else
+							{
+							  echo htmlentities($value);
+							}
+							
+							echo '</'.$key.'>';
+						}
+					}
+				}
+			}
+			else
+			{
+				echo 'null';
+			}
   			
   			echo '</result>';
+			
+			echo '</xml>';
   		}
   		else
   		{
         	header("HTTP/1.1 ".$this->getError('code')." ".$this->getError('status'));
         	header("Content-Type: application/json");
         
-        	echo json_encode(array("code" => $this->m_code, "result" => $this->m_data));
+        	echo json_encode(array("code" => $this->m_code, "result" => ($this->m_data != null) ? $this->m_data : null));
   		}
 		
+		unset($this->m_db);
 		die(); // End all operation
     }
 }
