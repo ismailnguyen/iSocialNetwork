@@ -8,7 +8,7 @@
  *               ESGI - 3A AL - 2014/2015
  */
 
-require_once 'BusinessLayer.php';
+include("../BusinessLayer.php");
 
 class FriendshipAccept extends BusinessLayer
 {
@@ -23,24 +23,24 @@ class FriendshipAccept extends BusinessLayer
 		{
 			if(getMethod() == "POST")
 	    	{
-				$_User_idUser = getIdUser();
-				$_User_idFriend = getRequest("User_idFriend");
+				$_user_idUser = getIdUser();
+				$_user_idFriend = getRequest("idFriend");
 				$_createdDate = date(); // date of acceptation
 				$_state = 1; // 0: Invitation sent | 1: Invitation accepted
 				$_oldState = 0;
 
         		$params = array(
-								":User_idUser" => $_User_idUser,
-								":User_idFriend" => $_User_idFriend,
+								":user_idUser" => $_user_idUser,
+								":user_idFriend" => $_user_idFriend,
 								":createdDate" => $_createdDate,
 								":state" => $_state,
 								":oldState" => $_oldState
 								);
 				
-				$statement = $m_db->prepare("SELECT * FROM Friendship WHERE User_idUser = :User_idUser AND User_idFriend = :User_idFriend AND state = :oldState");
+				$statement = $m_db->prepare("SELECT * FROM friendship WHERE user_idUser = :user_idUser AND user_idFriend = :user_idFriend AND state = :oldState");
 				if($statement->execute($params))
 				{  
-					$statement = $m_db->prepare("UPDATE Friendship SET state = :state, createdDate = :createdDate WHERE User_idUser = :User_idUser AND User_idFriend = :User_idFriend AND state = :oldState");
+					$statement = $m_db->prepare("UPDATE friendship SET state = :state, createdDate = :createdDate WHERE user_idUser = :user_idUser AND user_idFriend = :user_idFriend AND state = :oldState");
 					if($statement && $statement->execute($params))
 					{
 						$this->addData(array("createdDate" => $_createdDate));
@@ -67,7 +67,6 @@ class FriendshipAccept extends BusinessLayer
 		finally
 		{
 			$this->response();
-			unset($m_db);
 		}
 	}
 }

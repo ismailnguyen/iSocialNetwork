@@ -8,7 +8,7 @@
  *               ESGI - 3A AL - 2014/2015
  */
 
-require_once '../BusinessLayer.php';
+include("../BusinessLayer.php");
 
 class AccountSubscribe extends BusinessLayer
 {
@@ -21,34 +21,36 @@ class AccountSubscribe extends BusinessLayer
 	{
 		try
 		{
-			if(getMethod() == "POST")
+			if($this->getMethod() == "POST")
 	    {
 				$_firstname = getRequest("firstname");
 				$_lastname = getRequest("firstname");
 				$_email = getRequest("email");
 			 	$_password = hash(getRequest("password")); //do not forget to hash password before saving !
+				$_gender = getRequest("gender");
 				$_birthdate = getRequest("birthdate");
 				$_createdDate = date();
 
-        $params = array(
-                        ":firstname" => $_firstname,
-                        ":lastname" => $_lastname,
-                        ":email" => $_email,
-					    ":password" => $_password,
-                        ":birtdhdate" => $_birthdate,
-                        ":createdDate" => $_createdDate
-                        );
+				$params = array(
+								":firstname" => $_firstname,
+								":lastname" => $_lastname,
+								":email" => $_email,
+								":password" => $_password,
+								":gender" => $_gender,
+								":birtdhdate" => $_birthdate,
+								":createdDate" => $_createdDate
+								);
 
-				$statement = $m_db->prepare("SELECT * FROM User WHERE email = ?");
+				$statement = $m_db->prepare("SELECT * FROM user WHERE email = ?");
 				if($statement->execute(array($_email)) && count($statement->fetch()) == 0)
 				{
-					$statement = $m_db->prepare("INSERT INTO User (firstname, lastname, email, password, birthdate, created_date) VALUES (:firstname, :lastname, :email, :password, :birthdate, :created_date)");
+					$statement = $m_db->prepare("INSERT INTO user (firstname, lastname, email, password, gender, birthdate, createdDate) VALUES (:firstname, :lastname, :email, :password, :gender, :birthdate, :createdDate)");
 					if($statement && $statement->execute($params))
-          {
-            $_id = $m_db->lastInsertId();
+					{
+						$_id = $m_db->lastInsertId();
 
-            $this->addData(array("idUser" => $_id, "token" => getToken($_id), "createdDate" => $_createdDate));
-          }
+						$this->addData(array("idUser" => $_id, "token" => getToken($_id), "createdDate" => $_createdDate));
+					}
 					else
 					{
 						$this->setCode(27); //Error adding user
@@ -65,13 +67,12 @@ class AccountSubscribe extends BusinessLayer
 			}
 		}
 		catch(PDOException $e)
-    {
-        $this->setCode(36); //Server error
-    }
+		{
+			$this->setCode(36); //Server error
+		}
 		finally
 		{
 			$this->response();
-			unset($m_db);
 		}
 	}
 }

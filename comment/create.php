@@ -8,7 +8,7 @@
  *               ESGI - 3A AL - 2014/2015
  */
 
-require_once 'BusinessLayer.php';
+include("../BusinessLayer.php");
 
 class CommentCreate extends BusinessLayer
 {
@@ -23,19 +23,19 @@ class CommentCreate extends BusinessLayer
 		{
 			if(getMethod() == "POST")
 	    	{
-				$_User_idUser = getIdUser();
-				$_Post_idPost = getRequest("Post_idPost");
+				$_user_idUser = getIdUser();
+				$_post_idPost = getRequest("idPost");
 				$_content = getRequest("content");
 				$_createdDate = date();
 
         		$params = array(
-								":User_idUser" => $_User_idUser,
-								":Post_idPost" => $_Post_idPost,
+								":user_idUser" => $_user_idUser,
+								":post_idPost" => $_post_idPost,
 								":content" => $_content,
 								":createdDate" => $_createdDate
 								);
 
-				$statement = $m_db->prepare("INSERT INTO Comment (User_idUser, Post_idPost, content, createdDate) VALUES (:User_idUser, :Post_idPost, :content, :createdDate)");
+				$statement = $m_db->prepare("INSERT INTO comment (user_idUser, post_idPost, content, createdDate) VALUES (:user_idUser, :post_idPost, :content, :createdDate)");
 				if($statement && $statement->execute($params))
 				{
 				  $_idComment = $m_db->lastInsertId();
@@ -59,7 +59,6 @@ class CommentCreate extends BusinessLayer
 		finally
 		{
 			$this->response();
-			unset($m_db);
 		}
 	}
 }

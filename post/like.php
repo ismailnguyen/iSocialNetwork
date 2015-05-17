@@ -8,7 +8,7 @@
  *               ESGI - 3A AL - 2014/2015
  */
 
-require_once 'BusinessLayer.php';
+include("../BusinessLayer.php");
 
 class PostLike extends BusinessLayer
 {
@@ -21,26 +21,26 @@ class PostLike extends BusinessLayer
 	{
 		try
 		{
-			if(getMethod() == "POST")
+			if($this->getMethod() == "POST")
 	    {
-				$_User_idUser = getIdUser();
-				$_Post_idPost = getRequest("Post_idPost");
+				$_user_idUser = getIdUser();
+				$_post_idPost = getRequest("idPost");
 				$_createdDate = date();
 
         $params = array(
-                        ":User_idUser" => $_User_idUser,
-                        ":Post_idPost" => $_Post_idPost,
+                        ":user_idUser" => $_user_idUser,
+                        ":post_idPost" => $_post_idPost,
                         ":createdDate" => $_createdDate
                         );
 
-				$statement = $m_db->prepare("SELECT * FROM PostLike WHERE User_idUser = :User_idUser AND Post_idPost = :Post_idPost");
+				$statement = $m_db->prepare("SELECT * FROM post_like WHERE user_idUser = :user_idUser AND post_idPost = :post_idPost");
 				if($statement->execute($params))
 				{
 				  //Unlike if like already exist
 				  $result = $statement->fetch();
 				  
-					$statement = $m_db->prepare("DELETE FROM PostLike WHERE idPostLike = ?");
-					if(!($statement && $statement->execute(array($result['idPostLike']))))
+					$statement = $m_db->prepare("DELETE FROM post_like WHERE idPost_like = ?");
+					if(!($statement && $statement->execute(array($result['idPost_like']))))
           {
 						$this->setCode(27); //Error removing like
 					}
@@ -48,12 +48,12 @@ class PostLike extends BusinessLayer
 				else
 				{
 					//Like
-					$statement = $m_db->prepare("INSERT INTO PostLike (User_idUser, Post_idPost, createdDate) VALUES (:User_idUser, :Post_idPost, :createdDate)");
+					$statement = $m_db->prepare("INSERT INTO post_like (user_idUser, post_idPost, createdDate) VALUES (:user_idUser, :post_idPost, :createdDate)");
 					if($statement && $statement->execute($params))
           {
             $_idPostLike = $m_db->lastInsertId();
 
-            $this->addData(array("idPostLike" => $_idPostLike,  "createdDate" => $_createdDate));
+            $this->addData(array("idPost_like" => $_idPostLike,  "createdDate" => $_createdDate));
           }
 					else
 					{
@@ -73,7 +73,6 @@ class PostLike extends BusinessLayer
 		finally
 		{
 			$this->response();
-			unset($m_db);
 		}
 	}
 }

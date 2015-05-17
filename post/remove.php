@@ -8,7 +8,7 @@
  *               ESGI - 3A AL - 2014/2015
  */
 
-require_once 'BusinessLayer.php';
+include("../BusinessLayer.php");
 
 class PostRemove extends BusinessLayer
 {
@@ -21,20 +21,20 @@ class PostRemove extends BusinessLayer
 	{
 		try
 		{
-			if(getMethod() == "POST")
+			if($this->getMethod() == "POST")
 	    	{
 				$_idPost = getRequest("idPost");
-				$_User_idUser = getIdUser();				
+				$_user_idUser = getIdUser();				
 
         		$params = array(
 								":idPost" => $_idPost,
-								":User_idUser" => $_User_idUser								
+								":user_idUser" => $_user_idUser								
 								);
 
-				$statement = $m_db->prepare("SELECT * FROM Post WHERE idPost = :idPost AND User_idUser = :User_idUser");
+				$statement = $m_db->prepare("SELECT * FROM post WHERE idPost = :idPost AND user_idUser = :user_idUser");
 				if($statement->execute($params))
 				{  
-					$statement = $m_db->prepare("DELETE FROM Post WHERE idPost = :idPost AND User_idUser = :User_idUser");
+					$statement = $m_db->prepare("DELETE FROM post WHERE idPost = :idPost AND user_idUser = :user_idUser");
 					if(!($statement && $statement->execute(array($params))))
           			{
 						$this->setCode(27); //Error removing comment
@@ -57,7 +57,6 @@ class PostRemove extends BusinessLayer
 		finally
 		{
 			$this->response();
-			unset($m_db);
 		}
 	}
 }

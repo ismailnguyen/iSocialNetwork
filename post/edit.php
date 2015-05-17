@@ -8,7 +8,7 @@
  *               ESGI - 3A AL - 2014/2015
  */
 
-require_once 'BusinessLayer.php';
+include("../BusinessLayer.php");
 
 class PostEdit extends BusinessLayer
 {
@@ -21,19 +21,19 @@ class PostEdit extends BusinessLayer
 	{
 		try
 		{
-			if(getMethod() == "POST")
+			if($this->getMethod() == "POST")
 	    	{
 				$_idPost = getRequest("idPost");
-				$_User_idUser = $this->getIdUser();
+				$_user_idUser = $this->getIdUser();
 				$_content = getRequest("content");
 
         		$params = array(
 								":idComment" => $_idComment,
-								":User_idUser" => $_User_idUser,
+								":user_idUser" => $_user_idUser,
 								":content" => $_content
 								);
 
-				$statement = $m_db->prepare("UPDATE Post SET content = :content WHERE idPost = :idPost AND User_idUser = :User_idUser");
+				$statement = $m_db->prepare("UPDATE Post SET content = :content WHERE idPost = :idPost AND user_idUser = :user_idUser");
 				if($statement && $statement->execute($params))
 				{
 					$this->addData(array("idPost" => $_idComment,  "content" => $_content));
@@ -55,7 +55,6 @@ class PostEdit extends BusinessLayer
 		finally
 		{
 			$this->response();
-			unset($m_db);
 		}
 	}
 }

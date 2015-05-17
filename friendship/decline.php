@@ -8,7 +8,7 @@
  *               ESGI - 3A AL - 2014/2015
  */
 
-require_once 'BusinessLayer.php';
+include("../BusinessLayer.php");
 
 class FriendshipDecline extends BusinessLayer
 {
@@ -23,19 +23,19 @@ class FriendshipDecline extends BusinessLayer
 		{
 			if(getMethod() == "POST")
 	    	{
-				$_User_idUser = getIdUser();
-				$_User_idFriend = getRequest("User_idFriend");
+				$_user_idUser = getIdUser();
+				$_user_idFriend = getRequest("user_idFriend");
 				$_createdDate = date();
 
         		$params = array(
-								":User_idUser" => $_User_idUser,
-								":User_idFriend" => $_User_idFriend
+								":user_idUser" => $_user_idUser,
+								":user_idFriend" => $_user_idFriend
 								);
 			
-				$statement = $m_db->prepare("SELECT * FROM Friendship WHERE User_idUser = :User_idUser AND User_idFriend = :User_idFriend");
+				$statement = $m_db->prepare("SELECT * FROM friendship WHERE user_idUser = :user_idUser AND user_idFriend = :user_idFriend");
 				if($statement->execute($params))
 				{  
-					$statement = $m_db->prepare("DELETE FROM Friendship WHERE User_idUser = :User_idUser AND User_idFriend = :User_idFriend");
+					$statement = $m_db->prepare("DELETE FROM friendship WHERE user_idUser = :user_idUser AND user_idFriend = :user_idFriend");
 					if(!($statement && $statement->execute(array($params))))
           			{
 						$this->setCode(27); //Error declining friendship
@@ -58,7 +58,6 @@ class FriendshipDecline extends BusinessLayer
 		finally
 		{
 			$this->response();
-			unset($m_db);
 		}
 	}
 }

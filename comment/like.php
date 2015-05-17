@@ -8,7 +8,7 @@
  *               ESGI - 3A AL - 2014/2015
  */
 
-require_once 'BusinessLayer.php';
+include("../BusinessLayer.php");
 
 class CommentLike extends BusinessLayer
 {
@@ -23,24 +23,24 @@ class CommentLike extends BusinessLayer
 		{
 			if(getMethod() == "POST")
 	    	{
-				$_User_idUser = getIdUser();
-				$_Comment_idComment = getRequest("Comment_idComment");
+				$_user_idUser = getIdUser();
+				$_comment_idComment = getRequest("idComment");
 				$_createdDate = date();
 
         		$params = array(
-								":User_idUser" => $_User_idUser,
-								":Comment_idComment" => $_Comment_idComment,
+								":user_idUser" => $_user_idUser,
+								":comment_idComment" => $_comment_idComment,
 								":createdDate" => $_createdDate
 								);
 
-				$statement = $m_db->prepare("SELECT * FROM CommentLike WHERE User_idUser = :User_idUser AND Comment_idComment = :Comment_idComment");
+				$statement = $m_db->prepare("SELECT * FROM comment_like WHERE user_idUser = :user_idUser AND comment_idComment = :comment_idComment");
 				if($statement->execute($params))
 				{
 				  	//Unlike if like already exist
 				  	$result = $statement->fetch();
 				  
-					$statement = $m_db->prepare("DELETE FROM CommentLike WHERE idCommentLike = ?");
-					if(!($statement && $statement->execute(array($result['idCommentLike']))))
+					$statement = $m_db->prepare("DELETE FROM comment_like WHERE idComment_like = ?");
+					if(!($statement && $statement->execute(array($result['idComment_like']))))
           			{
 						$this->setCode(27); //Error removing like
 					}
@@ -48,12 +48,12 @@ class CommentLike extends BusinessLayer
 				else
 				{
 					//Like
-					$statement = $m_db->prepare("INSERT INTO CommentLike (User_idUser, Comment_idComment, created_date) VALUES (:User_idUser, :Comment_idComment, :createdDate)");
+					$statement = $m_db->prepare("INSERT INTO comment_like (user_idUser, comment_idComment, created_date) VALUES (:user_idUser, :comment_idComment, :createdDate)");
 					if($statement && $statement->execute($params))
           			{
             			$_idCommentLike = $m_db->lastInsertId();
 
-            			$this->addData(array("idCommentLike" => $_idCommentLike,  "createdDate" => $_createdDate));
+            			$this->addData(array("idComment_like" => $_idComment_like,  "createdDate" => $_createdDate));
           			}
 					else
 					{
@@ -73,7 +73,6 @@ class CommentLike extends BusinessLayer
 		finally
 		{
 			$this->response();
-			unset($m_db);
 		}
 	}
 }

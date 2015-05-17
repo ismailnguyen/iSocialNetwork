@@ -31,7 +31,7 @@ class AccountLogin extends BusinessLayer
 					            ":password" => $_password
                         		);
 
-				$statement = $m_db->prepare("SELECT * FROM User WHERE email = :email AND password = :password");
+				$statement = $m_db->prepare("SELECT * FROM user WHERE email = :email AND password = :password");
 				if($statement->execute($params))
 				{
 					$result = $statement->fetch();

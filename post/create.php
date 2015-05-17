@@ -8,7 +8,7 @@
  *               ESGI - 3A AL - 2014/2015
  */
 
-require_once 'BusinessLayer.php';
+include("../BusinessLayer.php");
 
 class PostCreate extends BusinessLayer
 {
@@ -21,19 +21,19 @@ class PostCreate extends BusinessLayer
 	{
 		try
 		{
-			if(getMethod() == "POST")
+			if($this->getMethod() == "POST")
 	    	{
-				$_User_idUser = getIdUser();
+				$_user_idUser = getIdUser();
 				$_content = getRequest("content");
 				$_createdDate = date();
 
         		$params = array(
-								":User_idUser" => $_User_idUser,
+								":user_idUser" => $_user_idUser,
 								":content" => $_content,
 								":createdDate" => $_createdDate
 								);
 
-				$statement = $m_db->prepare("INSERT INTO Post (User_idUser, content, createdDate) VALUES (:User_idUser, :content, :createdDate)");
+				$statement = $m_db->prepare("INSERT INTO post (user_idUser, content, createdDate) VALUES (:user_idUser, :content, :createdDate)");
 				if($statement && $statement->execute($params))
 				{
 				  $_idPost = $m_db->lastInsertId();
@@ -57,7 +57,6 @@ class PostCreate extends BusinessLayer
 		finally
 		{
 			$this->response();
-			unset($m_db);
 		}
 	}
 }

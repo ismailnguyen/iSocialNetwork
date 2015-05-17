@@ -29,15 +29,26 @@ class BusinessLayer
 			$this->setRequest();
 
 			$this->m_output = ($this->getRequest("output") != null && $this->getRequest("output") == "xml") ? "xml" : "json";
-
-			if($_useToken && !checkToken($this->getRequest("token")))
+			
+			if($_useToken) // If token is needed we check it
 			{
-				$this->setCode(30); // Invalid token !
-				$this->response();
-			}
-			else
-			{
-				$this->m_idUser = $this->getRequest("idUser");
+				if($this->getRequest("token") != null) // If token is well provided
+				{
+					if($this->checkToken($this->getRequest("token"))) // If provided token is valid
+					{
+						$this->m_idUser = $this->getRequest("idUser");
+					}
+					else
+					{
+						$this->setCode(30); // Invalid token !
+						$this->response();
+					}
+				}
+				else
+				{
+					$this->setCode(18); // Bad request, Need token !
+					$this->response();
+				}
 			}
 		}
 		catch(Exception $e)
