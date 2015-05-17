@@ -21,11 +21,11 @@ class FriendshipInvite extends BusinessLayer
 	{
 		try
 		{
-			if(getMethod() == "POST")
+			if($this->getMethod() == "POST")
 	    	{
-				$_user_idUser = getIdUser();
-				$_user_idFriend = getRequest("user_idFriend");
-				$_createdDate = date();
+				$_user_idUser = $this->getIdUser();
+				$_user_idFriend = $this->getRequest("user_idFriend");
+				$_createdDate = date("Y-m-d H:i:s");
 				$_state = 0; // 0: Invitation sent | 1: Invitation accepted
 
         		$params = array(
@@ -35,10 +35,10 @@ class FriendshipInvite extends BusinessLayer
 								":state" => $_state
 								);
 
-				$statement = $m_db->prepare("INSERT INTO friendship (user_idUser, user_idFriend, createdDate, state) VALUES (:user_idUser, :user_idFriend, :createdDate, :state)");
+				$statement = $this->m_db->prepare("INSERT INTO friendship (user_idUser, user_idFriend, createdDate, state) VALUES (:user_idUser, :user_idFriend, :createdDate, :state)");
 				if($statement && $statement->execute($params))
 				{
-				  $_idFriendship = $m_db->lastInsertId();
+				  $_idFriendship = $this->m_db->lastInsertId();
 
 				  $this->addData(array("idFriendship" => $_idFriendship,  "createdDate" => $_createdDate));
 				}

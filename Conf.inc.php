@@ -8,7 +8,7 @@
  *               ESGI - 3A AL - 2014/2015
  */
 
-define("DEBUG", false); //false
+define("DEBUG", true); //false
 
 
 define("DB_HOST", "localhost"); // database host

@@ -21,11 +21,11 @@ class FriendshipAccept extends BusinessLayer
 	{
 		try
 		{
-			if(getMethod() == "POST")
+			if($this->getMethod() == "POST")
 	    	{
-				$_user_idUser = getIdUser();
-				$_user_idFriend = getRequest("idFriend");
-				$_createdDate = date(); // date of acceptation
+				$_user_idUser = $this->getIdUser();
+				$_user_idFriend = $this->getRequest("idFriend");
+				$_createdDate = date("Y-m-d H:i:s"); // date of acceptation
 				$_state = 1; // 0: Invitation sent | 1: Invitation accepted
 				$_oldState = 0;
 
@@ -37,10 +37,10 @@ class FriendshipAccept extends BusinessLayer
 								":oldState" => $_oldState
 								);
 				
-				$statement = $m_db->prepare("SELECT * FROM friendship WHERE user_idUser = :user_idUser AND user_idFriend = :user_idFriend AND state = :oldState");
+				$statement = $this->m_db->prepare("SELECT * FROM friendship WHERE user_idUser = :user_idUser AND user_idFriend = :user_idFriend AND state = :oldState");
 				if($statement->execute($params))
 				{  
-					$statement = $m_db->prepare("UPDATE friendship SET state = :state, createdDate = :createdDate WHERE user_idUser = :user_idUser AND user_idFriend = :user_idFriend AND state = :oldState");
+					$statement = $this->m_db->prepare("UPDATE friendship SET state = :state, createdDate = :createdDate WHERE user_idUser = :user_idUser AND user_idFriend = :user_idFriend AND state = :oldState");
 					if($statement && $statement->execute($params))
 					{
 						$this->addData(array("createdDate" => $_createdDate));

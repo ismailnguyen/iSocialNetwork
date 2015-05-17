@@ -23,9 +23,9 @@ class PostEdit extends BusinessLayer
 		{
 			if($this->getMethod() == "POST")
 	    	{
-				$_idPost = getRequest("idPost");
+				$_idPost = $this->getRequest("idPost");
 				$_user_idUser = $this->getIdUser();
-				$_content = getRequest("content");
+				$_content = $this->getRequest("content");
 
         		$params = array(
 								":idComment" => $_idComment,
@@ -33,7 +33,7 @@ class PostEdit extends BusinessLayer
 								":content" => $_content
 								);
 
-				$statement = $m_db->prepare("UPDATE Post SET content = :content WHERE idPost = :idPost AND user_idUser = :user_idUser");
+				$statement = $this->m_db->prepare("UPDATE Post SET content = :content WHERE idPost = :idPost AND user_idUser = :user_idUser");
 				if($statement && $statement->execute($params))
 				{
 					$this->addData(array("idPost" => $_idComment,  "content" => $_content));

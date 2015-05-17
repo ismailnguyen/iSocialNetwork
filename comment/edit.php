@@ -21,11 +21,11 @@ class CommentEdit extends BusinessLayer
 	{
 		try
 		{
-			if(getMethod() == "POST")
+			if($this->getMethod() == "POST")
 	    	{
-				$_idComment = getRequest("idComment");
+				$_idComment = $this->getRequest("idComment");
 				$_user_idUser = $this->getIdUser();
-				$_content = getRequest("content");
+				$_content = $this->getRequest("content");
 
         		$params = array(
 								":idComment" => $_idComment,
@@ -33,7 +33,7 @@ class CommentEdit extends BusinessLayer
 								":content" => $_content
 								);
 
-				$statement = $m_db->prepare("UPDATE comment SET content = :content WHERE idComment = :idComment AND user_idUser = :user_idUser");
+				$statement = $this->m_db->prepare("UPDATE comment SET content = :content WHERE idComment = :idComment AND user_idUser = :user_idUser");
 				if($statement && $statement->execute($params))
 				{
 					$this->addData(array("idComment" => $_idComment,  "content" => $_content));

@@ -18,7 +18,7 @@ class BusinessLayer
 	private $m_output; // Output format: xml, json
 	private $m_idUser; // Current user id
 
-	protected $m_db = null; //PDO Instance
+	public $m_db = null; //PDO Instance
 
     public function __construct($_useToken=true)
     {
@@ -83,7 +83,7 @@ class BusinessLayer
 		
 		foreach($_data as $_key => $_value)
 		{
-			$this->$m_data[$_key] = $_value;
+			$this->m_data[$_key] = $_value;
 		}
 	}
 

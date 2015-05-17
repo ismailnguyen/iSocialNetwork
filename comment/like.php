@@ -21,11 +21,11 @@ class CommentLike extends BusinessLayer
 	{
 		try
 		{
-			if(getMethod() == "POST")
+			if($this->getMethod() == "POST")
 	    	{
-				$_user_idUser = getIdUser();
-				$_comment_idComment = getRequest("idComment");
-				$_createdDate = date();
+				$_user_idUser = $this->getIdUser();
+				$_comment_idComment = $this->getRequest("idComment");
+				$_createdDate = date("Y-m-d H:i:s");
 
         		$params = array(
 								":user_idUser" => $_user_idUser,
@@ -33,13 +33,13 @@ class CommentLike extends BusinessLayer
 								":createdDate" => $_createdDate
 								);
 
-				$statement = $m_db->prepare("SELECT * FROM comment_like WHERE user_idUser = :user_idUser AND comment_idComment = :comment_idComment");
+				$statement = $this->m_db->prepare("SELECT * FROM comment_like WHERE user_idUser = :user_idUser AND comment_idComment = :comment_idComment");
 				if($statement->execute($params))
 				{
 				  	//Unlike if like already exist
 				  	$result = $statement->fetch();
 				  
-					$statement = $m_db->prepare("DELETE FROM comment_like WHERE idComment_like = ?");
+					$statement = $this->m_db->prepare("DELETE FROM comment_like WHERE idComment_like = ?");
 					if(!($statement && $statement->execute(array($result['idComment_like']))))
           			{
 						$this->setCode(27); //Error removing like
@@ -48,10 +48,10 @@ class CommentLike extends BusinessLayer
 				else
 				{
 					//Like
-					$statement = $m_db->prepare("INSERT INTO comment_like (user_idUser, comment_idComment, created_date) VALUES (:user_idUser, :comment_idComment, :createdDate)");
+					$statement = $this->m_db->prepare("INSERT INTO comment_like (user_idUser, comment_idComment, created_date) VALUES (:user_idUser, :comment_idComment, :createdDate)");
 					if($statement && $statement->execute($params))
           			{
-            			$_idCommentLike = $m_db->lastInsertId();
+            			$_idCommentLike = $this->m_db->lastInsertId();
 
             			$this->addData(array("idComment_like" => $_idComment_like,  "createdDate" => $_createdDate));
           			}

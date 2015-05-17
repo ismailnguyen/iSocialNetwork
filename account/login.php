@@ -23,21 +23,21 @@ class AccountLogin extends BusinessLayer
 		{
 			if($this->getMethod() == "POST")
 	    	{
-				$_email = getRequest("email");
-			 	$_password = hash(getRequest("password")); //do not forget to hash password before saving !
+				$_email = $this->getRequest("email");
+			 	$_password = hash('sha256', $this->getRequest("password")); //do not forget to hash password before saving !
 
         		$params = array(
                         		":email" => $_email,
 					            ":password" => $_password
                         		);
 
-				$statement = $m_db->prepare("SELECT * FROM user WHERE email = :email AND password = :password");
+				$statement = $this->m_db->prepare("SELECT * FROM user WHERE email = :email AND password = :password");
 				if($statement->execute($params))
 				{
 					$result = $statement->fetch();
 
           			$this->addData(array("idUser" => $result['id'],
-											"token" => getToken($result['id'])));
+											"token" => $this->getToken($result['id'])));
 				}
 				else
 				{

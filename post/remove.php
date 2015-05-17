@@ -23,18 +23,18 @@ class PostRemove extends BusinessLayer
 		{
 			if($this->getMethod() == "POST")
 	    	{
-				$_idPost = getRequest("idPost");
-				$_user_idUser = getIdUser();				
+				$_idPost = $this->getRequest("idPost");
+				$_user_idUser = $this->getIdUser();				
 
         		$params = array(
 								":idPost" => $_idPost,
 								":user_idUser" => $_user_idUser								
 								);
 
-				$statement = $m_db->prepare("SELECT * FROM post WHERE idPost = :idPost AND user_idUser = :user_idUser");
+				$statement = $this->m_db->prepare("SELECT * FROM post WHERE idPost = :idPost AND user_idUser = :user_idUser");
 				if($statement->execute($params))
 				{  
-					$statement = $m_db->prepare("DELETE FROM post WHERE idPost = :idPost AND user_idUser = :user_idUser");
+					$statement = $this->m_db->prepare("DELETE FROM post WHERE idPost = :idPost AND user_idUser = :user_idUser");
 					if(!($statement && $statement->execute(array($params))))
           			{
 						$this->setCode(27); //Error removing comment

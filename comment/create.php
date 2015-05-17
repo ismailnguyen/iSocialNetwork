@@ -21,12 +21,12 @@ class CommentCreate extends BusinessLayer
 	{
 		try
 		{
-			if(getMethod() == "POST")
+			if($this->getMethod() == "POST")
 	    	{
-				$_user_idUser = getIdUser();
-				$_post_idPost = getRequest("idPost");
-				$_content = getRequest("content");
-				$_createdDate = date();
+				$_user_idUser = $this->getIdUser();
+				$_post_idPost = $this->getRequest("idPost");
+				$_content = $this->getRequest("content");
+				$_createdDate = date("Y-m-d H:i:s");
 
         		$params = array(
 								":user_idUser" => $_user_idUser,
@@ -35,10 +35,10 @@ class CommentCreate extends BusinessLayer
 								":createdDate" => $_createdDate
 								);
 
-				$statement = $m_db->prepare("INSERT INTO comment (user_idUser, post_idPost, content, createdDate) VALUES (:user_idUser, :post_idPost, :content, :createdDate)");
+				$statement = $this->m_db->prepare("INSERT INTO comment (user_idUser, post_idPost, content, createdDate) VALUES (:user_idUser, :post_idPost, :content, :createdDate)");
 				if($statement && $statement->execute($params))
 				{
-				  $_idComment = $m_db->lastInsertId();
+				  $_idComment = $this->m_db->lastInsertId();
 
 				  $this->addData(array("idComment" => $_idComment,  "createdDate" => $_createdDate));
 				}
