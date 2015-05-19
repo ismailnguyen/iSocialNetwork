@@ -34,27 +34,44 @@ class CommentCreate extends BusinessLayer
 								":content" => $_content,
 								":createdDate" => $_createdDate
 								);
-
-				$statement = $this->m_db->prepare("INSERT INTO comment (user_idUser, post_idPost, content, createdDate) VALUES (:user_idUser, :post_idPost, :content, :createdDate)");
-				if($statement && $statement->execute($params))
+			
+				$statement = $this->m_db->prepare("SELECT * FROM post WHERE idPost = ?");
+				if($statement->execute(array($_post_idPost)))
 				{
-				  $_idComment = $this->m_db->lastInsertId();
+					if($statement->rowCount() == 1)
+					{
+						$statement = $this->m_db->prepare("INSERT INTO comment (user_idUser, post_idPost, content, createdDate) VALUES (:user_idUser, :post_idPost, :content, :createdDate)");
+						if($statement && $statement->execute($params))
+						{
+							$_idComment = $this->m_db->lastInsertId();
 
-				  $this->addData(array("idComment" => $_idComment,  "createdDate" => $_createdDate));
+							$this->addData(array("idComment" => $_idComment,  "createdDate" => $_createdDate));
+						}
+						else
+						{
+							$this->setCode(27); // CONFLICT: database error
+						}
+					}
+					else
+					{
+						$this->addData(array("msg" => 'Post does not exist'));
+						$this->setCode(24); // NOT ACCEPTABLE: Wrong post id
+					}
 				}
 				else
 				{
-					$this->setCode(27); //Error adding comment
+					$this->setCode(18); // BAD REQUEST
 				}
 			}
 			else
 			{
-				$this->setCode(23); //Request method not accepted
+				$this->setCode(23); // METHOD NOT ALLOWED: Only POST
 			}
 		}
 		catch(PDOException $e)
 		{
-			$this->setCode(36); //Server error
+			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			$this->setCode(36); // INTERNAL SERVER ERROR
 		}
 		finally
 		{

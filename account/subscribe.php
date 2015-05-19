@@ -78,7 +78,7 @@ class AccountSubscribe extends BusinessLayer
 		}
 		catch(PDOException $e)
 		{
-			$this->setCode(36); //Server error
+			$this->setCode(36); // INTERNAL SERVER ERROR
 		}
 		finally
 		{

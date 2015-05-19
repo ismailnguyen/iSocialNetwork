@@ -40,7 +40,8 @@ class BusinessLayer
 					}
 					else
 					{
-						$this->setCode(30); // Invalid token !
+						$this->addData(array("msg" => "Invalid token"));
+						$this->setCode(19); // UNAUTHORIZED: Invalid token
 						$this->response();
 					}
 				}
@@ -69,9 +70,9 @@ class BusinessLayer
         return hash('sha256', $_id.TOKEN_KEY);
     }
 
-    public function checkToken(String $token)
+    public function checkToken($_token)
     {
-        if($this->getToken($this->getRequest("idUser")) == token)
+        if($this->getToken($this->getRequest("idUser")) == $_token)
             return true;
 
         return false;
