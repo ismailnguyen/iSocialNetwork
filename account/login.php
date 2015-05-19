@@ -36,16 +36,15 @@ class AccountLogin extends BusinessLayer
 				{
 					if($statement->rowCount() == 1)
 					{
-						$result = $statement->fetch();
+						$_result = $statement->fetch();
 
-						$this->addData(array("idUser" => $result,
-												"token" => $this->getToken($result['id']),
-												$_email => $_password
+						$this->addData(array("idUser" => $_result['idUser'],
+												"token" => $this->getToken($_result['idUser'])
 												));
 					}
 					else
 					{
-						$this->addData(array("msg" => "Wrong email/password"));
+						$this->addData(array("msg" => 'Wrong email/password'));
 						$this->setCode(24); // NOT ACCEPTABLE: Wrong email/password
 					}
 				}

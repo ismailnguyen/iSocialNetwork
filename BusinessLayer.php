@@ -219,6 +219,8 @@ class BusinessLayer
   			{
 				foreach($this->m_data as $index => $post)
 				{
+					echo '<'.$index.'>';
+					
 					if(is_array($post))
 					{
 						foreach($post as $key => $value)
@@ -234,12 +236,18 @@ class BusinessLayer
 							}
 							else
 							{
-							  echo htmlentities($value);
+								echo htmlentities($value);
 							}
 							
 							echo '</'.$key.'>';
 						}
 					}
+					else
+					{
+						echo htmlentities($post);
+					}
+					
+					echo '</'.$index.'>';
 				}
 			}
 			else

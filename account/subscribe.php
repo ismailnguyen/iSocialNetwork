@@ -26,7 +26,7 @@ class AccountSubscribe extends BusinessLayer
 				$_firstname = $this->getRequest("firstname");
 				$_lastname = $this->getRequest("lastname");
 				$_email = $this->getRequest("email");
-			 	$_password = hash('sha256', $this->getRequest("password")); //do not forget to hash password before saving !
+			 	$_password = hash('sha256', $this->getRequest("password")); // hash password for safe database storage
 				$_gender = $this->getRequest("gender");
 				$_birthdate = $this->getRequest("birthdate");
 				$_createdDate = date("Y-m-d H:i:s");
