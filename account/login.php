@@ -24,7 +24,7 @@ class AccountLogin extends BusinessLayer
 			if($this->getMethod() == "POST")
 	    	{
 				$_email = $this->getRequest("email");
-			 	$_password = hash('sha256', $this->getRequest("password")); //do not forget to hash password before saving !
+			 	$_password = hash('sha256', $this->getRequest("password")); // hash password before compare with database content
 
         		$params = array(
                         		":email" => $_email,
@@ -34,24 +34,34 @@ class AccountLogin extends BusinessLayer
 				$statement = $this->m_db->prepare("SELECT * FROM user WHERE email = :email AND password = :password");
 				if($statement->execute($params))
 				{
-					$result = $statement->fetch();
+					if($statement->rowCount() == 1)
+					{
+						$result = $statement->fetch();
 
-          			$this->addData(array("idUser" => $result['id'],
-											"token" => $this->getToken($result['id'])));
+						$this->addData(array("idUser" => $result,
+												"token" => $this->getToken($result['id']),
+												$_email => $_password
+												));
+					}
+					else
+					{
+						$this->addData(array("msg" => "Wrong email/password"));
+						$this->setCode(24); // NOT ACCEPTABLE: Wrong email/password
+					}
 				}
 				else
 				{
-					$this->setCode(24); //Wrong email/password
+					$this->setCode(18); // BAD REQUEST
 				}
 			}
 			else
 			{
-				$this->setCode(23); //Request method not accepted
+				$this->setCode(23); // METHOD NOT ALLOWED: Only POST
 			}
 		}
 		catch(PDOException $e)
 		{
-			$this->setCode(36); //Server error
+			$this->setCode(36); // INTERNAL SERVER ERROR
 		}
 		finally
 		{

@@ -44,7 +44,7 @@ class AccountSubscribe extends BusinessLayer
 				$statement = $this->m_db->prepare("SELECT * FROM user WHERE email = ?");
 				if($statement->execute(array($_email)))
 				{
-					if(count($statement->fetch()) != 0)
+					if($statement->rowCount() == 0)
 					{
 						$statement = $this->m_db->prepare("INSERT INTO user (firstname, lastname, email, password, gender, birthdate, createdDate) VALUES (:firstname, :lastname, :email, :password, :gender, :birthdate, :createdDate)");
 						if($statement && $statement->execute($params))
@@ -57,30 +57,27 @@ class AccountSubscribe extends BusinessLayer
 						}
 						else
 						{
-							$this->setCode(27); //Error adding user
+							$this->setCode(27); // CONFLICT: database error
 						}
 					}
 					else
 					{
-						$this->addData(array("error" => "User already exist"));
-						$this->setCode(24); //Error user already exist
+						$this->addData(array("msg" => "User already exist"));
+						$this->setCode(24); // NOT ACCEPTABLE: user already exist
 					}
 				}
 				else
 				{
-					$this->addData(array("PDO error" => $statement->errorCode()));
-					$this->addData(array("error" => "Bad request"));
-					$this->setCode(24); // Bad request
+					$this->setCode(18); // BAD REQUEST
 				}
 			}
 			else
 			{
-				$this->setCode(23); //Request method not accepted
+				$this->setCode(23); // METHOD NOT ALLOWED: Only POST
 			}
 		}
 		catch(PDOException $e)
 		{
-			$this->addData(array("PDO error" => $statement->errorCode()));
 			$this->setCode(36); //Server error
 		}
 		finally
