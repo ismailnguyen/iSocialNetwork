@@ -54,7 +54,9 @@ class PostRead extends BusinessLayer
 															OR user_idUser in
 																			(
 																				SELECT user_idFriend
+																				
 																				FROM friendship
+																				
 																				WHERE user_idUser = :user_idUser
 																			)");
 					

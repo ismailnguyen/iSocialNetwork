@@ -1,5 +1,5 @@
 <?php
-/* @File: post/read.php
+/* @File: tag/read.php
  *
  *              --- API iSocialNetwork ---
  *
@@ -24,41 +24,36 @@ class TagRead extends BusinessLayer
 			if($this->getMethod() == "GET")
 	    	{
 				$_user_idUser = $this->getIdUser();
-				$_idNotification = $this->getRequest("idNotification");
+				$_idTag = $this->getRequest("idTag");
 				
-				if($_idNotification != null)
+				if($_idTag != null)
 				{
 					$statement = $this->m_db->prepare("SELECT *
 					
-														FROM notification
+														FROM tag
 														
-														WHERE idNotification = ?");
+														WHERE idTag = ?");
 														
-					if($statement && $statement->execute(array($_idNotification)))
+					if($statement && $statement->execute(array($_idTag)))
 					{
 						$this->addData($statement->fetch(PDO::FETCH_ASSOC));
 					}
 					else
 					{
-						$this->addData(array("msg" => 'Notification does not exist'));
-						$this->setCode(24); // NOT ACCEPTABLE: Wrong notification id
+						$this->addData(array("msg" => 'Tag does not exist'));
+						$this->setCode(24); // NOT ACCEPTABLE: Wrong tag id
 					}
 				}
 				else
 				{
 					$statement = $this->m_db->prepare("SELECT *
 					
-														FROM post
+														FROM tag
 														
-														WHERE user_idUser = ".$_user_idUser." 
-															OR user_idUser in
-																			(
-																				SELECT user_idFriend
-																				FROM friendship
-																				WHERE user_idUser = ".$_user_idUser."
-																			)");
+														WHERE user_idFriend = :user_idUser 
+													");
 					
-					if($statement && $statement->execute(array($_idNotification)))
+					if($statement && $statement->execute(array(":user_idUser" => $_user_idUser)))
 					{
 						$this->addData($statement->fetchAll(PDO::FETCH_ASSOC));
 					}

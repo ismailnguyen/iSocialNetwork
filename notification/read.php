@@ -24,41 +24,36 @@ class NotificationRead extends BusinessLayer
 			if($this->getMethod() == "GET")
 	    	{
 				$_user_idUser = $this->getIdUser();
-				$_idPost = $this->getRequest("idPost");
+				$_idNotification = $this->getRequest("idNotification");
 				
-				if($_idPost != null)
+				if($_idNotification != null)
 				{
 					$statement = $this->m_db->prepare("SELECT *
 					
-														FROM post
+														FROM notification
 														
-														WHERE idPost = ?");
+														WHERE idNotification = ?");
 														
-					if($statement && $statement->execute(array($_idPost)))
+					if($statement && $statement->execute(array($_idNotification)))
 					{
 						$this->addData($statement->fetch(PDO::FETCH_ASSOC));
 					}
 					else
 					{
-						$this->addData(array("msg" => 'Post does not exist'));
-						$this->setCode(24); // NOT ACCEPTABLE: Wrong post id
+						$this->addData(array("msg" => 'Notification does not exist'));
+						$this->setCode(24); // NOT ACCEPTABLE: Wrong notification id
 					}
 				}
 				else
 				{
 					$statement = $this->m_db->prepare("SELECT *
 					
-														FROM post
+														FROM notification
 														
-														WHERE user_idUser = ".$_user_idUser." 
-															OR user_idUser in
-																			(
-																				SELECT user_idFriend
-																				FROM friendship
-																				WHERE user_idUser = ".$_user_idUser."
-																			)");
+														WHERE user_idUser = :user_idUser 
+													");
 					
-					if($statement && $statement->execute(array($_idPost)))
+					if($statement && $statement->execute(array(":user_idUser" => $_user_idUser)))
 					{
 						$this->addData($statement->fetchAll(PDO::FETCH_ASSOC));
 					}

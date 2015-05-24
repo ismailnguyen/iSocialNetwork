@@ -26,8 +26,10 @@ class TagRemove extends BusinessLayer
 				$_idPost = $this->getRequest("idPost");
 				$_user_idUser = $this->getIdUser();				
 
-        		$params = array(":idPost" => $_idPost,
-								":user_idUser" => $_user_idUser);
+        		$params = array(
+								":idPost" => $_idPost,
+								":user_idUser" => $_user_idUser
+								);
 
 				$statement = $this->m_db->prepare("SELECT * FROM post
 				
