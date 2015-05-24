@@ -51,6 +51,8 @@ class FriendshipInvite extends BusinessLayer
 													
 				if($statement && $statement->execute($params))
 				{
+					$this->setCode(2); // Created
+					
 					$this->addData(array("state" => $_state,
 											"createdDate" => $_createdDate));
 				}

@@ -47,8 +47,12 @@ class CommentLike extends BusinessLayer
 					
 														WHERE idComment_like = ?");
 					
-					if(!($statement && $statement->execute(array($result['idComment_like']))))
+					if($statement && $statement->execute(array($result['idComment_like'])))
           			{
+						$this->setCode(3); // Accepted			
+					}
+					else
+					{
 						$this->setCode(27); //Error removing like
 					}
 				}

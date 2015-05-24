@@ -48,6 +48,8 @@ class PostCreate extends BusinessLayer
 				if($statement && $statement->execute($params))
 				{
 					$_idPost = $this->m_db->lastInsertId();
+					
+					$this->setCode(2); // Created
 
 					$this->addData(array("idPost" => $_idPost,
 											"createdDate" => $_createdDate));

@@ -45,7 +45,13 @@ class PostLike extends BusinessLayer
 					
 														WHERE idPost_like = ?");
 														
-					if(!($statement && $statement->execute(array($result['idPost_like']))))
+											
+														
+					if($statement && $statement->execute(array($result['idPost_like'])))
+					{
+						$this->setCode(3); // Accepted
+					}
+					else
 					{
 						$this->setCode(27); //Error removing like
 					}
@@ -70,6 +76,8 @@ class PostLike extends BusinessLayer
 					if($statement && $statement->execute($params))
 					{
 						$_idPostLike = $this->m_db->lastInsertId();
+						
+						$this->setCode(2); // Created
 
 						$this->addData(array("idPost_like" => $_idPostLike,
 												"createdDate" => $_createdDate));

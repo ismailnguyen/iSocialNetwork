@@ -74,7 +74,9 @@ class AccountSubscribe extends BusinessLayer
 						if($statement && $statement->execute($params))
 						{
 							$_id = $this->m_db->lastInsertId();
-
+							
+							$this->setCode(2); // Created
+							
 							$this->addData(array("idUser" => $_id,
 													"token" => $this->getToken($_id),
 													"createdDate" => $_createdDate));

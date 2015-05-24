@@ -54,6 +54,8 @@ class FriendshipAccept extends BusinessLayer
 															AND state = :oldState");
 					if($statement && $statement->execute($params))
 					{
+						$this->setCode(3); // Accepted
+						
 						$this->addData(array("state" => $_state, 
 												"createdDate" => $_createdDate));
 					}

@@ -62,6 +62,8 @@ class CommentCreate extends BusinessLayer
 						if($statement && $statement->execute($params))
 						{
 							$_idComment = $this->m_db->lastInsertId();
+							
+							$this->setCode(2); // Created
 
 							$this->addData(array("idComment" => $_idComment,
 													"createdDate" => $_createdDate));
