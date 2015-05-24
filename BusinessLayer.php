@@ -187,51 +187,89 @@ class BusinessLayer
 
     private function getError($type) //type: code, status
     {
-        $status = Array(
-                  		    0 => array('code' => 100, 'status' => 'Continue'),
-                  		    1 => array('code' => 101, 'status' => 'Switching Protocols'),
-                  		    3 => array('code' => 200, 'status' => 'OK'),
-                  		    4 => array('code' => 201, 'status' => 'Created'),
-                  		    5 => array('code' => 202, 'status' => 'Accepted'),
-                  		    6 => array('code' => 203, 'status' => 'Non-Authoritative Information'),
-                  		    7 => array('code' => 204, 'status' => 'No Content'),
-                  		    8 => array('code' => 205, 'status' => 'Reset Content'),
-                  		    9 => array('code' => 206, 'status' => 'Partial Content'),
-                  		    10 => array('code' => 300, 'status' => 'Multiple Choices'),
-                  		    11 => array('code' => 301, 'status' => 'Moved Permanently'),
-                  		    12 => array('code' => 302, 'status' => 'Found'),
-                  		    13 => array('code' => 303, 'status' => 'See Other'),
-                  		    14 => array('code' => 304, 'status' => 'Not Modified'),
-                  		    15 => array('code' => 305, 'status' => 'Use Proxy'),
-                  		    16 => array('code' => 306, 'status' => '(Unused)'),
-                  		    17 => array('code' => 307, 'status' => 'Temporary Redirect'),
-                  		    18 => array('code' => 400, 'status' => 'Bad Request'),
-                  		    19 => array('code' => 401, 'status' => 'Unauthorized'),
-                  		    20 => array('code' => 402, 'status' => 'Payment Required'),
-                  		    21 => array('code' => 403, 'status' => 'Forbidden'),
-                  		    22 => array('code' => 404, 'status' => 'Not Found'),
-                  		    23 => array('code' => 405, 'status' => 'Method Not Allowed'),
-                  		    24 => array('code' => 406, 'status' => 'Not Acceptable'),
-                  		    25 => array('code' => 407, 'status' => 'Proxy Authentication Required'),
-                  		    26 => array('code' => 408, 'status' => 'Request Timeout'),
-                  		    27 => array('code' => 409, 'status' => 'Conflict'),
-                  		    28 => array('code' => 410, 'status' => 'Gone'),
-                  		    29 => array('code' => 411, 'status' => 'Length Required'),
-                  		    30 => array('code' => 412, 'status' => 'Precondition Failed'),
-                  		    31 => array('code' => 413, 'status' => 'Request Entity Too Large'),
-                  		    32 => array('code' => 414, 'status' => 'Request-URI Too Long'),
-                  		    33 => array('code' => 415, 'status' => 'Unsupported Media Type'),
-                  		    34 => array('code' => 416, 'status' => 'Requested Range Not Satisfiable'),
-                  		    35 => array('code' => 417, 'status' => 'Expectation Failed'),
-                  		    36 => array('code' => 500, 'status' => 'Internal Server Error'),
-                  		    37 => array('code' => 501, 'status' => 'Not Implemented'),
-                  		    38 => array('code' => 502, 'status' => 'Bad Gateway'),
-                  		    39 => array('code' => 503, 'status' => 'Service Unavailable'),
-                  		    40 => array('code' => 504, 'status' => 'Gateway Timeout'),
-                  		    41 => array('code' => 505, 'status' => 'HTTP Version Not Supported')
+        $status = array(		
+                  		    1 => array(
+										'code' => 200,
+										'status' => 'OK'
+										),
+
+                  		    2 => array(
+										'code' => 201,
+										'status' => 'Created'
+										),
+
+                  		    3 => array(
+										'code' => 202,
+										'status' => 'Accepted'
+										),
+
+                  		    4 => array(
+										'code' => 400,
+										'status' => 'Bad Request'
+										),
+
+                  		    5 => array(
+										'code' => 401,
+										'status' => 'Unauthorized'
+										),
+
+                  		    6 => array(
+										'code' => 403,
+										'status' => 'Forbidden'
+										),
+
+                  		    7 => array(
+										'code' => 404,
+										'status' => 'Not Found'
+										),
+
+                  		    8 => array(
+										'code' => 405,
+										'status' => 'Method Not Allowed'
+										),
+
+                  		    9 => array(
+										'code' => 406,
+										'status' => 'Not Acceptable'
+										),
+
+                  		    10 => array(
+										'code' => 409,
+										'status' => 'Conflict'
+										),
+
+                  		    11 => array(
+										'code' => 412,
+										'status' => 'Precondition Failed'
+										),
+							
+                  		    12 => array(
+										'code' => 417,
+										'status' => 'Expectation Failed'
+										),
+							
+                  		    13 => array(
+										'code' => 500,
+										'status' => 'Internal Server Error'	
+										),
+							
+                  		    14 => array(
+										'code' => 501,
+										'status' => 'Not Implemented'
+										),
+							
+                  		    15 => array(
+										'code' => 502,
+										'status' => 'Bad Gateway'
+										),
+							
+                  		    16 => array(
+										'code' => 503,
+										'status' => 'Service Unavailable'
+										)
                   		);
 
-        return (isset($status[$this->m_code])) ? $status[$this->m_code][$type] : "";
+        return isset($status[$this->m_code]) ? $status[$this->m_code][$type] : $status[14][$type];
     }
 
     public function response()
@@ -243,7 +281,7 @@ class BusinessLayer
   			
 			echo '<?xml version="1.0"?>';
 			
-			echo '<xml>';
+			echo '<response>';
 			
   			echo '<code>';
   			echo $this->m_code;
@@ -293,14 +331,17 @@ class BusinessLayer
   			
   			echo '</result>';
 			
-			echo '</xml>';
+			echo '</response>';
   		}
   		else
   		{
         	header("HTTP/1.1 ".$this->getError('code')." ".$this->getError('status'));
         	header("Content-Type: application/json");
         
-        	echo json_encode(array("code" => $this->m_code, "result" => ($this->m_data != null) ? $this->m_data : null));
+        	echo json_encode(array(
+									"code" => $this->m_code,
+									"result" => $this->m_data != null ? $this->m_data : null
+								));
   		}
 		
 		unset($this->m_db);
