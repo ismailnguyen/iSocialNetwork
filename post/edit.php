@@ -36,7 +36,7 @@ class PostEdit extends BusinessLayer
 				$statement = $this->m_db->prepare("UPDATE Post SET content = :content WHERE idPost = :idPost AND user_idUser = :user_idUser");
 				if($statement && $statement->execute($params))
 				{
-					$this->addData(array("idPost" => $_idComment,  "content" => $_content));
+					$this->addData(array("idPost" => $_idPost,  "content" => $_content));
 				}
 				else
 				{
