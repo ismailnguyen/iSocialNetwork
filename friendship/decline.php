@@ -27,15 +27,21 @@ class FriendshipDecline extends BusinessLayer
 				$_user_idFriend = $this->getRequest("idFriend");
 				$_createdDate = date("Y-m-d H:i:s");
 
-        		$params = array(
-								":user_idUser" => $_user_idUser,
-								":user_idFriend" => $_user_idFriend
-								);
+        		$params = array(":user_idUser" => $_user_idUser,
+								":user_idFriend" => $_user_idFriend);
 			
-				$statement = $this->m_db->prepare("SELECT * FROM friendship WHERE user_idUser = :user_idUser AND user_idFriend = :user_idFriend");
+				$statement = $this->m_db->prepare("SELECT * FROM friendship
+				
+													WHERE user_idUser = :user_idUser
+														AND user_idFriend = :user_idFriend");
+														
 				if($statement->execute($params))
 				{  
-					$statement = $this->m_db->prepare("DELETE FROM friendship WHERE user_idUser = :user_idUser AND user_idFriend = :user_idFriend");
+					$statement = $this->m_db->prepare("DELETE FROM friendship
+					
+														WHERE user_idUser = :user_idUser
+															AND user_idFriend = :user_idFriend");
+															
 					if(!($statement && $statement->execute(array($params))))
           			{
 						$this->setCode(27); //Error declining friendship

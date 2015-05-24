@@ -27,18 +27,30 @@ class PostCreate extends BusinessLayer
 				$_content = $this->getRequest("content");
 				$_createdDate = date("Y-m-d H:i:s");
 
-        		$params = array(
-								":user_idUser" => $_user_idUser,
+        		$params = array(":user_idUser" => $_user_idUser,
 								":content" => $_content,
-								":createdDate" => $_createdDate
-								);
+								":createdDate" => $_createdDate);
 
-				$statement = $this->m_db->prepare("INSERT INTO post (user_idUser, content, createdDate) VALUES (:user_idUser, :content, :createdDate)");
+				$statement = $this->m_db->prepare("INSERT INTO post
+													(
+														user_idUser,
+														content,
+														createdDate
+													)
+													
+													VALUES
+													(
+														:user_idUser, 
+														:content, 
+														:createdDate
+													)");
+													
 				if($statement && $statement->execute($params))
 				{
-				  $_idPost = $this->m_db->lastInsertId();
+					$_idPost = $this->m_db->lastInsertId();
 
-				  $this->addData(array("idPost" => $_idPost,  "createdDate" => $_createdDate));
+					$this->addData(array("idPost" => $_idPost,
+											"createdDate" => $_createdDate));
 				}
 				else
 				{

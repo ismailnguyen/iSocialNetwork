@@ -27,16 +27,21 @@ class CommentEdit extends BusinessLayer
 				$_user_idUser = $this->getIdUser();
 				$_content = $this->getRequest("content");
 
-        		$params = array(
-								":idComment" => $_idComment,
+        		$params = array(":idComment" => $_idComment,
 								":user_idUser" => $_user_idUser,
-								":content" => $_content
-								);
+								":content" => $_content);
 
-				$statement = $this->m_db->prepare("UPDATE comment SET content = :content WHERE idComment = :idComment AND user_idUser = :user_idUser");
+				$statement = $this->m_db->prepare("UPDATE comment
+													
+													SET content = :content 
+													
+													WHERE idComment = :idComment
+														AND user_idUser = :user_idUser");
+														
 				if($statement && $statement->execute($params))
 				{
-					$this->addData(array("idComment" => $_idComment,  "content" => $_content));
+					$this->addData(array("idComment" => $_idComment,
+											"content" => $_content));
 				}
 				else
 				{

@@ -26,15 +26,23 @@ class CommentRemove extends BusinessLayer
 				$_idComment = $this->getRequest("idComment");
 				$_User_idUser = $this->getIdUser();				
 
-        		$params = array(
-								":idComment" => $_idComment,
-								":user_idUser" => $_user_idUser								
-								);
+        		$params = array(":idComment" => $_idComment,
+								":user_idUser" => $_user_idUser);
 
-				$statement = $this->m_db->prepare("SELECT * FROM comment WHERE idComment = :idComment AND user_idUser = :user_idUser");
+				$statement = $this->m_db->prepare("SELECT *
+													
+													FROM comment
+													
+													WHERE idComment = :idComment
+														AND user_idUser = :user_idUser");
+				
 				if($statement->execute($params))
 				{  
-					$statement = $this->m_db->prepare("DELETE FROM comment WHERE idComment = :idComment AND user_idUser = :user_idUser");
+					$statement = $this->m_db->prepare("DELETE FROM comment
+													
+														WHERE idComment = :idComment 
+															AND user_idUser = :user_idUser");
+					
 					if(!($statement && $statement->execute(array($params))))
           			{
 						$this->setCode(27); //Error removing comment

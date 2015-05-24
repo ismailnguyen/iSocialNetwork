@@ -26,12 +26,16 @@ class AccountLogin extends BusinessLayer
 				$_email = $this->getRequest("email");
 			 	$_password = hash('sha256', $this->getRequest("password")); // hash password before compare with database content
 
-        		$params = array(
-                        		":email" => $_email,
-					            ":password" => $_password
-                        		);
+        		$params = array(":email" => $_email,
+					            ":password" => $_password);
 
-				$statement = $this->m_db->prepare("SELECT * FROM user WHERE email = :email AND password = :password");
+				$statement = $this->m_db->prepare("SELECT *
+													
+													FROM user
+													
+													WHERE email = :email
+														AND password = :password");
+														
 				if($statement->execute($params))
 				{
 					if($statement->rowCount() == 1)
@@ -39,8 +43,7 @@ class AccountLogin extends BusinessLayer
 						$_result = $statement->fetch();
 
 						$this->addData(array("idUser" => $_result['idUser'],
-												"token" => $this->getToken($_result['idUser'])
-												));
+												"token" => $this->getToken($_result['idUser'])));
 					}
 					else
 					{

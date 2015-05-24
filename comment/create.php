@@ -28,24 +28,43 @@ class CommentCreate extends BusinessLayer
 				$_content = $this->getRequest("content");
 				$_createdDate = date("Y-m-d H:i:s");
 
-        		$params = array(
-								":user_idUser" => $_user_idUser,
+        		$params = array(":user_idUser" => $_user_idUser,
 								":post_idPost" => $_post_idPost,
 								":content" => $_content,
-								":createdDate" => $_createdDate
-								);
+								":createdDate" => $_createdDate);
 			
-				$statement = $this->m_db->prepare("SELECT * FROM post WHERE idPost = ?");
+				$statement = $this->m_db->prepare("SELECT *
+						
+													FROM post
+													
+													WHERE idPost = ?");
+													
 				if($statement->execute(array($_post_idPost)))
 				{
 					if($statement->rowCount() == 1)
 					{
-						$statement = $this->m_db->prepare("INSERT INTO comment (user_idUser, post_idPost, content, createdDate) VALUES (:user_idUser, :post_idPost, :content, :createdDate)");
+						$statement = $this->m_db->prepare("INSERT INTO comment
+															(
+																user_idUser, 
+																post_idPost, 
+																content, 
+																createdDate
+															)
+															
+															VALUES
+															(
+																:user_idUser, 
+																:post_idPost, 
+																:content, 
+																:createdDate
+															)");
+															
 						if($statement && $statement->execute($params))
 						{
 							$_idComment = $this->m_db->lastInsertId();
 
-							$this->addData(array("idComment" => $_idComment,  "createdDate" => $_createdDate));
+							$this->addData(array("idComment" => $_idComment,
+													"createdDate" => $_createdDate));
 						}
 						else
 						{

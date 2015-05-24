@@ -29,13 +29,11 @@ class FriendshipAccept extends BusinessLayer
 				$_state = 1; // 0: Invitation sent | 1: Invitation accepted
 				$_oldState = 0;
 
-        		$params = array(
-								":user_idUser" => $_user_idUser,
+        		$params = array(":user_idUser" => $_user_idUser,
 								":user_idFriend" => $_user_idFriend,
 								":createdDate" => $_createdDate,
 								":state" => $_state,
-								":oldState" => $_oldState
-								);
+								":oldState" => $_oldState);
 				
 				$statement = $this->m_db->prepare("SELECT *
 				
@@ -56,7 +54,8 @@ class FriendshipAccept extends BusinessLayer
 															AND state = :oldState");
 					if($statement && $statement->execute($params))
 					{
-						$this->addData(array("createdDate" => $_createdDate));
+						$this->addData(array("state" => $_state, 
+												"createdDate" => $_createdDate));
 					}
 					else
 					{

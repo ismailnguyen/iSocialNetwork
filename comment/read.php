@@ -25,12 +25,22 @@ class CommentRead extends BusinessLayer
 	    	{
 				$_post_idPost = $this->getRequest("idPost");
 			
-				$statement = $this->m_db->prepare("SELECT * FROM post WHERE idPost = ?");
+				$statement = $this->m_db->prepare("SELECT *
+				
+													FROM post
+													
+													WHERE idPost = ?");
+													
 				if($statement->execute(array($_post_idPost)))
 				{
 					if($statement->rowCount() == 1)
 					{
-						$statement = $this->m_db->prepare("SELECT * FROM comment WHERE post_idPost = ?");
+						$statement = $this->m_db->prepare("SELECT * 
+									
+														FROM comment
+														
+														WHERE post_idPost = ?");
+														
 						if($statement && $statement->execute(array($_post_idPost)))
 						{
 							$this->addData($statement->fetchAll(PDO::FETCH_ASSOC));

@@ -28,7 +28,12 @@ class PostRead extends BusinessLayer
 				
 				if($_idPost != null)
 				{
-					$statement = $this->m_db->prepare("SELECT * FROM post WHERE idPost = ?");
+					$statement = $this->m_db->prepare("SELECT *
+					
+														FROM post
+														
+														WHERE idPost = ?");
+														
 					if($statement && $statement->execute(array($_idPost)))
 					{
 						$this->addData($statement->fetch(PDO::FETCH_ASSOC));
@@ -42,13 +47,16 @@ class PostRead extends BusinessLayer
 				else
 				{
 					$statement = $this->m_db->prepare("SELECT *
+					
 														FROM post
+														
 														WHERE user_idUser = ".$_user_idUser." 
-															OR user_idUser in (
-																SELECT user_idFriend
-																FROM friendship
-																WHERE user_idUser = ".$_user_idUser."
-														)");
+															OR user_idUser in
+																			(
+																				SELECT user_idFriend
+																				FROM friendship
+																				WHERE user_idUser = ".$_user_idUser."
+																			)");
 					
 					if($statement && $statement->execute(array($_idPost)))
 					{

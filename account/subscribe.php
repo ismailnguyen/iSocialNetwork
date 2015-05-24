@@ -31,22 +31,46 @@ class AccountSubscribe extends BusinessLayer
 				$_birthdate = $this->getRequest("birthdate");
 				$_createdDate = date("Y-m-d H:i:s");
 
-				$params = array(
-								":firstname" => $_firstname,
+				$params = array(":firstname" => $_firstname,
 								":lastname" => $_lastname,
 								":email" => $_email,
 								":password" => $_password,
 								":gender" => $_gender,
 								":birthdate" => $_birthdate,
-								":createdDate" => $_createdDate
-								);
+								":createdDate" => $_createdDate);
 
-				$statement = $this->m_db->prepare("SELECT * FROM user WHERE email = ?");
+				$statement = $this->m_db->prepare("SELECT * 
+				
+													FROM user
+													
+													WHERE email = ?");
+													
 				if($statement->execute(array($_email)))
 				{
 					if($statement->rowCount() == 0)
 					{
-						$statement = $this->m_db->prepare("INSERT INTO user (firstname, lastname, email, password, gender, birthdate, createdDate) VALUES (:firstname, :lastname, :email, :password, :gender, :birthdate, :createdDate)");
+						$statement = $this->m_db->prepare("INSERT INTO user
+															(
+																firstname, 
+																lastname, 
+																email, 
+																password, 
+																gender, 
+																birthdate, 
+																createdDate
+															)
+															
+															VALUES 
+															(
+																:firstname, 
+																:lastname, 
+																:email, 
+																:password, 
+																:gender, 
+																:birthdate, 
+																:createdDate
+															)");
+															
 						if($statement && $statement->execute($params))
 						{
 							$_id = $this->m_db->lastInsertId();

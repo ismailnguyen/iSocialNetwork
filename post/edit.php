@@ -27,16 +27,21 @@ class PostEdit extends BusinessLayer
 				$_user_idUser = $this->getIdUser();
 				$_content = $this->getRequest("content");
 
-        		$params = array(
-								":idPost" => $_idPost,
+        		$params = array":idPost" => $_idPost,
 								":user_idUser" => $_user_idUser,
-								":content" => $_content
-								);
+								":content" => $_content);
 
-				$statement = $this->m_db->prepare("UPDATE post SET content = :content WHERE idPost = :idPost AND user_idUser = :user_idUser");
+				$statement = $this->m_db->prepare("UPDATE post 
+				
+													SET content = :content 
+													
+													WHERE idPost = :idPost 
+														AND user_idUser = :user_idUser");
+														
 				if($statement && $statement->execute($params))
 				{
-					$this->addData(array("idPost" => $_idPost,  "content" => $_content));
+					$this->addData(array("idPost" => $_idPost,
+											"content" => $_content));
 				}
 				else
 				{
