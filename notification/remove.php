@@ -23,32 +23,32 @@ class NotificationRemove extends BusinessLayer
 		{
 			if($this->getMethod() == "DELETE")
 	    	{
-				$_idPost = $this->getRequest("idPost");
+				$_idNotification = $this->getRequest("idNotification");
 				$_user_idUser = $this->getIdUser();				
 
-        		$params = array(":idPost" => $_idPost,
+        		$params = array(":idNotification" => $_idNotification,
 								":user_idUser" => $_user_idUser);
 
-				$statement = $this->m_db->prepare("SELECT * FROM post
+				$statement = $this->m_db->prepare("SELECT * FROM notification
 				
-													WHERE idPost = :idPost
+													WHERE idNotification = :idNotification
 														AND user_idUser = :user_idUser");
 														
 				if($statement->execute($params))
 				{  
-					$statement = $this->m_db->prepare("DELETE FROM post
+					$statement = $this->m_db->prepare("DELETE FROM notification
 					
-														WHERE idPost = :idPost
+														WHERE idNotification = :idNotification
 															AND user_idUser = :user_idUser");
 					
 					if(!($statement && $statement->execute(array($params))))
           			{
-						$this->setCode(27); //Error removing comment
+						$this->setCode(27); //Error removing notification
 					}
 				}
 				else
 				{
-					$this->setCode(18); //Bad request, comment does not exist
+					$this->setCode(18); //Bad request, notification does not exist
 				}
 			}
 			else

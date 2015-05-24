@@ -1,5 +1,5 @@
 <?php
-/* @File: post/remove.php
+/* @File: tag/remove.php
  *
  *              --- API iSocialNetwork ---
  *
@@ -23,34 +23,34 @@ class TagRemove extends BusinessLayer
 		{
 			if($this->getMethod() == "DELETE")
 	    	{
-				$_idPost = $this->getRequest("idPost");
+				$_idTag = $this->getRequest("idTag");
 				$_user_idUser = $this->getIdUser();				
 
         		$params = array(
-								":idPost" => $_idPost,
+								":idTag" => $_idTag,
 								":user_idUser" => $_user_idUser
 								);
 
-				$statement = $this->m_db->prepare("SELECT * FROM post
+				$statement = $this->m_db->prepare("SELECT * FROM tag
 				
-													WHERE idPost = :idPost
+													WHERE idTag = :idTag
 														AND user_idUser = :user_idUser");
 														
 				if($statement->execute($params))
 				{  
-					$statement = $this->m_db->prepare("DELETE FROM post
+					$statement = $this->m_db->prepare("DELETE FROM tag
 					
-														WHERE idPost = :idPost
+														WHERE idTag = :idTag
 															AND user_idUser = :user_idUser");
 					
 					if(!($statement && $statement->execute(array($params))))
           			{
-						$this->setCode(27); //Error removing comment
+						$this->setCode(27); //Error removing tag
 					}
 				}
 				else
 				{
-					$this->setCode(18); //Bad request, comment does not exist
+					$this->setCode(18); //Bad request, tag does not exist
 				}
 			}
 			else

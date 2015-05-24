@@ -43,12 +43,12 @@ class PostRemove extends BusinessLayer
 					
 					if(!($statement && $statement->execute(array($params))))
           			{
-						$this->setCode(27); //Error removing comment
+						$this->setCode(27); //Error removing post
 					}
 				}
 				else
 				{
-					$this->setCode(18); //Bad request, comment does not exist
+					$this->setCode(18); //Bad request, post does not exist
 				}
 			}
 			else
