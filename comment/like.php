@@ -21,7 +21,7 @@ class CommentLike extends BusinessLayer
 	{
 		try
 		{
-			if($this->getMethod() == "POST")
+			if($this->getMethod() == "GET")
 	    	{
 				$_user_idUser = $this->getIdUser();
 				$_comment_idComment = $this->getRequest("idComment");

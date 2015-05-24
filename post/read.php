@@ -21,7 +21,7 @@ class PostRead extends BusinessLayer
 	{
 		try
 		{
-			if($this->getMethod() == "POST")
+			if($this->getMethod() == "GET")
 	    	{
 				$_user_idUser = $this->getIdUser();
 				$_idPost = $this->getRequest("idPost");
@@ -48,7 +48,7 @@ class PostRead extends BusinessLayer
 																SELECT user_idFriend
 																FROM friendship
 																WHERE user_idUser = ".$_user_idUser."
-															)");
+														)");
 					
 					if($statement && $statement->execute(array($_idPost)))
 					{
@@ -62,7 +62,7 @@ class PostRead extends BusinessLayer
 			}
 			else
 			{
-				$this->setCode(23); // METHOD NOT ALLOWED: Only POST
+				$this->setCode(23); // METHOD NOT ALLOWED: Only GET
 			}
 		}
 		catch(PDOException $e)

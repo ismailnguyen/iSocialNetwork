@@ -21,7 +21,7 @@ class CommentRead extends BusinessLayer
 	{
 		try
 		{
-			if($this->getMethod() == "POST")
+			if($this->getMethod() == "GET")
 	    	{
 				$_post_idPost = $this->getRequest("idPost");
 			
@@ -53,7 +53,7 @@ class CommentRead extends BusinessLayer
 			}
 			else
 			{
-				$this->setCode(23); // METHOD NOT ALLOWED: Only POST
+				$this->setCode(23); // METHOD NOT ALLOWED: Only GET
 			}
 		}
 		catch(PDOException $e)

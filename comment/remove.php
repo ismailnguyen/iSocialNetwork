@@ -21,7 +21,7 @@ class CommentRemove extends BusinessLayer
 	{
 		try
 		{
-			if($this->getMethod() == "POST")
+			if($this->getMethod() == "DELETE")
 	    	{
 				$_idComment = $this->getRequest("idComment");
 				$_User_idUser = $this->getIdUser();				

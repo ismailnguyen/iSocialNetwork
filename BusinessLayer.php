@@ -113,6 +113,9 @@ class BusinessLayer
 	{
 		try
 		{
+			if(isset($_SERVER['PHP_AUTH_USER'])) $this->m_request["idUser"] = $_SERVER['PHP_AUTH_USER'];
+			if(isset($_SERVER['PHP_AUTH_PW'])) $this->m_request["token"] =  $_SERVER['PHP_AUTH_PW'];
+			
 			$this->m_request["method"] = $_SERVER['REQUEST_METHOD'];
 			
 			if($this->m_request["method"] == 'POST' && array_key_exists('HTTP_X_HTTP_METHOD', $_SERVER))
