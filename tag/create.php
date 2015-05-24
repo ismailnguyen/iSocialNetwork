@@ -26,7 +26,6 @@ class TagCreate extends BusinessLayer
 				$_user_idUser = $this->getIdUser();
 				$_user_idFriend = $this->getRequest("idFriend");
 				$_post_idPost = $this->getRequest("idPost");
-				$_content = $this->getRequest("content");
 				$_createdDate = date("Y-m-d H:i:s");
 
         		$params = array(
