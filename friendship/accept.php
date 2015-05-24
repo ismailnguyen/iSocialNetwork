@@ -37,10 +37,23 @@ class FriendshipAccept extends BusinessLayer
 								":oldState" => $_oldState
 								);
 				
-				$statement = $this->m_db->prepare("SELECT * FROM friendship WHERE user_idUser = :user_idUser AND user_idFriend = :user_idFriend AND state = :oldState");
+				$statement = $this->m_db->prepare("SELECT *
+				
+													FROM friendship 
+													
+													WHERE user_idUser = :user_idUser
+														AND user_idFriend = :user_idFriend
+														AND state = :oldState");
 				if($statement->execute($params))
 				{  
-					$statement = $this->m_db->prepare("UPDATE friendship SET state = :state, createdDate = :createdDate WHERE user_idUser = :user_idUser AND user_idFriend = :user_idFriend AND state = :oldState");
+					$statement = $this->m_db->prepare("UPDATE friendship
+					
+														SET state = :state,
+															createdDate = :createdDate
+														
+														WHERE user_idUser = :user_idUser
+															AND user_idFriend = :user_idFriend
+															AND state = :oldState");
 					if($statement && $statement->execute($params))
 					{
 						$this->addData(array("createdDate" => $_createdDate));

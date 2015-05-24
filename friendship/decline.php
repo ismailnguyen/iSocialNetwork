@@ -24,7 +24,7 @@ class FriendshipDecline extends BusinessLayer
 			if($this->getMethod() == "GET")
 	    	{
 				$_user_idUser = $this->getIdUser();
-				$_user_idFriend = $this->getRequest("user_idFriend");
+				$_user_idFriend = $this->getRequest("idFriend");
 				$_createdDate = date("Y-m-d H:i:s");
 
         		$params = array(
