@@ -33,13 +33,25 @@ class FriendshipInvite extends BusinessLayer
 								":createdDate" => $_createdDate,
 								":state" => $_state);
 
-				$statement = $this->m_db->prepare("INSERT INTO friendship (user_idUser, user_idFriend, createdDate, state) VALUES (:user_idUser, :user_idFriend, :createdDate, :state)");
+				$statement = $this->m_db->prepare("INSERT INTO friendship
+													(
+														user_idUser, 
+														user_idFriend, 
+														createdDate, 
+														state
+													) 
+													
+													VALUES
+													(
+													:user_idUser, 
+													:user_idFriend, 
+													:createdDate,
+													:state
+													)");
+													
 				if($statement && $statement->execute($params))
 				{
-					$_idFriendship = $this->m_db->lastInsertId();
-
-					$this->addData(array("idFriendship" => $_idFriendship,
-											"state" => $_state,
+					$this->addData(array("state" => $_state,
 											"createdDate" => $_createdDate));
 				}
 				else
