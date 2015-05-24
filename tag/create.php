@@ -43,7 +43,7 @@ class TagCreate extends BusinessLayer
 														
 				if($statement->execute($params))
 				{
-					$statement = $this->m_db->prepare("INSERT INTO post
+					$statement = $this->m_db->prepare("INSERT INTO tag
 														(
 															user_idUser,
 															user_idFriend,
