@@ -35,7 +35,7 @@ class FriendshipDecline extends BusinessLayer
 													WHERE user_idUser = :user_idUser
 														AND user_idFriend = :user_idFriend");
 														
-				if($statement->execute($params))
+				if($statement->execute($params) && $statement->rowCount() == 1)
 				{  
 					$statement = $this->m_db->prepare("DELETE FROM friendship
 					

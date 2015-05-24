@@ -1,5 +1,5 @@
 <?php
-/* @File: post/create.php
+/* @File: tag/create.php
  *
  *              --- API iSocialNetwork ---
  *
@@ -24,39 +24,56 @@ class TagCreate extends BusinessLayer
 			if($this->getMethod() == "POST")
 	    	{
 				$_user_idUser = $this->getIdUser();
+				$_user_idFriend = $this->getRequest("idFriend");
+				$_post_idPost = $this->getRequest("idPost");
 				$_content = $this->getRequest("content");
 				$_createdDate = date("Y-m-d H:i:s");
 
-        		$params = array(":user_idUser" => $_user_idUser,
-								":content" => $_content,
-								":createdDate" => $_createdDate);
+        		$params = array(
+								":user_idUser" => $_user_idUser,
+								":user_idFriend" => $_user_idFriend,
+								":post_idPost" = > $_post_idPost,
+								":createdDate" => $_createdDate
+								);
 
-				$statement = $this->m_db->prepare("INSERT INTO post
-													(
-														user_idUser,
-														content,
-														createdDate
-													)
-													
-													VALUES
-													(
-														:user_idUser, 
-														:content, 
-														:createdDate
-													)");
-													
-				if($statement && $statement->execute($params))
+				$statement = $this->m_db->prepare("SELECT * FROM post
+				
+													WHERE idPost = :post_idPost
+														AND user_idUser = :user_idUser");
+														
+				if($statement->execute($params))
 				{
-					$_idPost = $this->m_db->lastInsertId();
-					
-					$this->setCode(2); // Created
+					$statement = $this->m_db->prepare("INSERT INTO post
+														(
+															user_idUser,
+															user_idFriend,
+															post_idPost,
+															createdDate
+														)
+														
+														VALUES
+														(
+															:user_idUser,
+															:user_idFriend,
+															:post_idPost,
+															:createdDate
+														)");
+														
+					if($statement && $statement->execute($params))
+					{
+						$_idTag = $this->m_db->lastInsertId();
+						
+						$this->setCode(2); // Created
 
-					$this->addData(array("idPost" => $_idPost,
-											"createdDate" => $_createdDate));
-				}
-				else
-				{
-					$this->setCode(27); //Error adding post
+						$this->addData(array(
+											"idTag" => $_idTag,
+											"createdDate" => $_createdDate
+											));
+					}
+					else
+					{
+						$this->setCode(27); //Error adding tag
+					}
 				}
 			}
 			else

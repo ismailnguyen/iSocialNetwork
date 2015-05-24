@@ -33,7 +33,7 @@ class NotificationCreate extends BusinessLayer
 								":createdDate" => $_createdDate
 								);
 
-				$statement = $this->m_db->prepare("INSERT INTO post
+				$statement = $this->m_db->prepare("INSERT INTO notification
 													(
 														user_idUser,
 														content,
@@ -49,12 +49,12 @@ class NotificationCreate extends BusinessLayer
 													
 				if($statement && $statement->execute($params))
 				{
-					$_idPost = $this->m_db->lastInsertId();
+					$_idNotification = $this->m_db->lastInsertId();
 					
 					$this->setCode(2); // Created
 
 					$this->addData(array(
-										"idPost" => $_idPost,
+										"idNotification" => $_idNotification,
 										"createdDate" => $_createdDate
 										));
 				}
