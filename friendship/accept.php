@@ -21,7 +21,7 @@ class FriendshipAccept extends BusinessLayer
 	{
 		try
 		{
-			if($this->getMethod() == "POST")
+			if($this->getMethod() == "GET")
 	    	{
 				$_user_idUser = $this->getIdUser();
 				$_user_idFriend = $this->getRequest("idFriend");

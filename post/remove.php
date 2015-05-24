@@ -21,7 +21,7 @@ class PostRemove extends BusinessLayer
 	{
 		try
 		{
-			if($this->getMethod() == "POST")
+			if($this->getMethod() == "DELETE")
 	    	{
 				$_idPost = $this->getRequest("idPost");
 				$_user_idUser = $this->getIdUser();				

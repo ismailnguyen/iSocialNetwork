@@ -21,7 +21,7 @@ class PostLike extends BusinessLayer
 	{
 		try
 		{
-			if($this->getMethod() == "POST")
+			if($this->getMethod() == "GET")
 	    {
 				$_user_idUser = $this->getIdUser();
 				$_post_idPost = $this->getRequest("idPost");
