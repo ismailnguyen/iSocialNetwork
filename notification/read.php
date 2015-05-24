@@ -1,5 +1,5 @@
 <?php
-/* @File: post/read.php
+/* @File: notification/read.php
  *
  *              --- API iSocialNetwork ---
  *
@@ -10,7 +10,7 @@
 
 include("../BusinessLayer.php");
 
-class PostRead extends BusinessLayer
+class NotificationRead extends BusinessLayer
 {
 	public function __construct()
 	{
@@ -50,15 +50,15 @@ class PostRead extends BusinessLayer
 					
 														FROM post
 														
-														WHERE user_idUser = :user_idUser 
+														WHERE user_idUser = ".$_user_idUser." 
 															OR user_idUser in
 																			(
 																				SELECT user_idFriend
 																				FROM friendship
-																				WHERE user_idUser = :user_idUser
+																				WHERE user_idUser = ".$_user_idUser."
 																			)");
 					
-					if($statement && $statement->execute(array(":user_idUser" => $_user_idUser)))
+					if($statement && $statement->execute(array($_idPost)))
 					{
 						$this->addData($statement->fetchAll(PDO::FETCH_ASSOC));
 					}
@@ -85,6 +85,6 @@ class PostRead extends BusinessLayer
 	}
 }
 
-$api = new PostRead();
+$api = new NotificationRead();
 $api->run();
 ?>
