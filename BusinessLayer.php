@@ -93,11 +93,11 @@ class BusinessLayer
 		return $this->m_request["method"];
 	}
 
-	public function getRequest($key)
+	public function getRequest($_key)
 	{
 		try
 		{
-			return (array_key_exists($key, $this->m_request)) ? htmlentities($this->m_request[$key]) : null;
+			return (array_key_exists($_key, $this->m_request)) ? htmlentities($this->m_request[$_key]) : null;
 		}
 		catch(Exception $e)
 		{
@@ -114,21 +114,34 @@ class BusinessLayer
 		try
 		{
 			$this->m_request["method"] = $_SERVER['REQUEST_METHOD'];
-			//var_dump($this->m_request); // trick to show whole request content
 			
+			if($this->m_request["method"] == 'POST' && array_key_exists('HTTP_X_HTTP_METHOD', $_SERVER))
+			{
+				if($_SERVER['HTTP_X_HTTP_METHOD'] == 'DELETE')
+				{
+					$this->m_request["method"] = 'DELETE';
+				}
+				elseif($_SERVER['HTTP_X_HTTP_METHOD'] == 'PUT') {
+					$this->m_request["method"] = 'PUT';
+				}
+				else
+				{
+					throw new Exception("Unexpected Header");
+				}
+			}
+		
 			switch($this->m_request["method"])
 			{
+				case "DELETE":
 				case "POST":
-					$_method = $_POST; //&$_POST
-					break;
-				case "GET":
-					$_method = $_GET; //&$_GET
+					$_method = $this->cleanInputs($_POST);
 					break;
 				case "PUT":
-					$_method = $_PUT; //&$_PUT
+				case "GET":
+					$_method = $this->cleanInputs($_GET);
 					break;
-				case "DELETE":
-					$_method = $_DELETE; //&$_DELETE
+				default:
+					$this->setCode(23); // METHOD NOT ALLOWED
 					break;
 			}
 
@@ -144,6 +157,25 @@ class BusinessLayer
         	$this->response();
 		}
 	}
+	
+	private function cleanInputs($_data) {
+        $clean_input = Array();
+		
+        if (is_array($_data))
+		{
+            foreach ($_data as $k => $v)
+			{
+                $clean_input[$k] = $this->cleanInputs($v);
+            }
+        }
+		else
+		{
+            $clean_input = trim(strip_tags($_data));
+        }
+		
+        return $clean_input;
+    }
+
 
 	public function setCode($code)
 	{
