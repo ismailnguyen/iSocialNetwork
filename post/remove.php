@@ -41,8 +41,19 @@ class PostRemove extends BusinessLayer
 														WHERE idPost = :idPost
 															AND user_idUser = :user_idUser");
 					
-					if(!($statement && $statement->execute(array($params))))
+					if($statement && $statement->execute(array($params)))
           			{
+						$statement = $this->m_db->prepare("DELETE FROM comment
+					
+														WHERE post_idPost = :idPost");
+															
+						if(!($statement && $statement->execute(array($params))))
+						{
+							$this->setCode(10); //Error removing comments of the post
+						}
+					}
+					else
+					{
 						$this->setCode(10); //Error removing post
 					}
 				}

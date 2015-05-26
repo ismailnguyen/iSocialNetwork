@@ -41,7 +41,7 @@ class BusinessLayer
 					else
 					{
 						$this->addData(array("msg" => "Invalid token"));
-						$this->setCode(19); // UNAUTHORIZED: Invalid token
+						$this->setCode(5); // UNAUTHORIZED: Invalid token
 						$this->response();
 					}
 				}
