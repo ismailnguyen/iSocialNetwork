@@ -28,10 +28,12 @@ class CommentCreate extends BusinessLayer
 				$_content = $this->getRequest("content");
 				$_createdDate = date("Y-m-d H:i:s");
 
-        		$params = array(":user_idUser" => $_user_idUser,
+        		$params = array(
+								":user_idUser" => $_user_idUser,
 								":post_idPost" => $_post_idPost,
 								":content" => $_content,
-								":createdDate" => $_createdDate);
+								":createdDate" => $_createdDate
+								);
 			
 				$statement = $this->m_db->prepare("SELECT *
 						
@@ -65,34 +67,36 @@ class CommentCreate extends BusinessLayer
 							
 							$this->setCode(2); // Created
 
-							$this->addData(array("idComment" => $_idComment,
-													"createdDate" => $_createdDate));
+							$this->addData(array(
+												"idComment" => $_idComment,
+												"createdDate" => $_createdDate
+												));
 						}
 						else
 						{
-							$this->setCode(27); // CONFLICT: database error
+							$this->setCode(10); // CONFLICT: database error
 						}
 					}
 					else
 					{
 						$this->addData(array("msg" => 'Post does not exist'));
-						$this->setCode(24); // NOT ACCEPTABLE: Wrong post id
+						$this->setCode(9); // NOT ACCEPTABLE: Wrong post id
 					}
 				}
 				else
 				{
-					$this->setCode(18); // BAD REQUEST
+					$this->setCode(4); // BAD REQUEST
 				}
 			}
 			else
 			{
-				$this->setCode(23); // METHOD NOT ALLOWED: Only POST
+				$this->setCode(8); // METHOD NOT ALLOWED: Only POST
 			}
 		}
 		catch(PDOException $e)
 		{
 			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
-			$this->setCode(36); // INTERNAL SERVER ERROR
+			$this->setCode(13); // INTERNAL SERVER ERROR
 		}
 		finally
 		{

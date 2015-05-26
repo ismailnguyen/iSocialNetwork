@@ -27,9 +27,11 @@ class PostLike extends BusinessLayer
 				$_post_idPost = $this->getRequest("idPost");
 				$_createdDate = date("Y-m-d H:i:s");
 
-				$params = array(":user_idUser" => $_user_idUser,
+				$params = array(
+								":user_idUser" => $_user_idUser,
 								":post_idPost" => $_post_idPost,
-								":createdDate" => $_createdDate);
+								":createdDate" => $_createdDate
+								);
 
 				$statement = $this->m_db->prepare("SELECT * FROM post_like
 													
@@ -53,7 +55,7 @@ class PostLike extends BusinessLayer
 					}
 					else
 					{
-						$this->setCode(27); //Error removing like
+						$this->setCode(10); //Error removing like
 					}
 				}
 				else
@@ -79,23 +81,26 @@ class PostLike extends BusinessLayer
 						
 						$this->setCode(2); // Created
 
-						$this->addData(array("idPost_like" => $_idPostLike,
-												"createdDate" => $_createdDate));
+						$this->addData(array(
+											"idPost_like" => $_idPostLike,
+											"createdDate" => $_createdDate
+											));
 					}
 					else
 					{
-						$this->setCode(27); //Error adding like
+						$this->setCode(10); //Error adding like
 					}
 				}
 			}
 			else
 			{
-				$this->setCode(23); //Request method not accepted
+				$this->setCode(8); //Request method not accepted
 			}
 		}
 		catch(PDOException $e)
 		{
-			$this->setCode(36); //Server error
+			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			$this->setCode(13); //Server error
 		}
 		finally
 		{

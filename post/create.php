@@ -27,9 +27,11 @@ class PostCreate extends BusinessLayer
 				$_content = $this->getRequest("content");
 				$_createdDate = date("Y-m-d H:i:s");
 
-        		$params = array(":user_idUser" => $_user_idUser,
+        		$params = array(
+								":user_idUser" => $_user_idUser,
 								":content" => $_content,
-								":createdDate" => $_createdDate);
+								":createdDate" => $_createdDate
+								);
 
 				$statement = $this->m_db->prepare("INSERT INTO post
 													(
@@ -51,22 +53,25 @@ class PostCreate extends BusinessLayer
 					
 					$this->setCode(2); // Created
 
-					$this->addData(array("idPost" => $_idPost,
-											"createdDate" => $_createdDate));
+					$this->addData(array(
+										"idPost" => $_idPost,
+										"createdDate" => $_createdDate
+										));
 				}
 				else
 				{
-					$this->setCode(27); //Error adding post
+					$this->setCode(10); //Error adding post
 				}
 			}
 			else
 			{
-				$this->setCode(23); //Request method not accepted
+				$this->setCode(8); //Request method not accepted
 			}
 		}
 		catch(PDOException $e)
 		{
-			$this->setCode(36); //Server error
+			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			$this->setCode(13); //Server error
 		}
 		finally
 		{

@@ -71,18 +71,19 @@ class TagCreate extends BusinessLayer
 					}
 					else
 					{
-						$this->setCode(27); //Error adding tag
+						$this->setCode(10); //Error adding tag
 					}
 				}
 			}
 			else
 			{
-				$this->setCode(23); //Request method not accepted
+				$this->setCode(8); //Request method not accepted
 			}
 		}
 		catch(PDOException $e)
 		{
-			$this->setCode(36); //Server error
+			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			$this->setCode(13); //Server error
 		}
 		finally
 		{

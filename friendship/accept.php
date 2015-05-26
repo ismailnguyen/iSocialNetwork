@@ -29,11 +29,13 @@ class FriendshipAccept extends BusinessLayer
 				$_state = 1; // 0: Invitation sent | 1: Invitation accepted
 				$_oldState = 0;
 
-        		$params = array(":user_idUser" => $_user_idUser,
+        		$params = array(
+								":user_idUser" => $_user_idUser,
 								":user_idFriend" => $_user_idFriend,
 								":createdDate" => $_createdDate,
 								":state" => $_state,
-								":oldState" => $_oldState);
+								":oldState" => $_oldState
+								);
 				
 				$statement = $this->m_db->prepare("SELECT *
 				
@@ -56,27 +58,30 @@ class FriendshipAccept extends BusinessLayer
 					{
 						$this->setCode(3); // Accepted
 						
-						$this->addData(array("state" => $_state, 
-												"createdDate" => $_createdDate));
+						$this->addData(array(
+											"state" => $_state, 
+											"createdDate" => $_createdDate
+											));
 					}
 					else
 					{
-						$this->setCode(27); //Error accepting friendship
+						$this->setCode(10); //Error accepting friendship
 					}
 				}
 				else
 				{
-					$this->setCode(18); //Bad request, friendship does not exist
+					$this->setCode(4); //Bad request, friendship does not exist
 				}
 			}
 			else
 			{
-				$this->setCode(23); //Request method not accepted
+				$this->setCode(8); //Request method not accepted
 			}
 		}
 		catch(PDOException $e)
 		{
-			$this->setCode(36); //Server error
+			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			$this->setCode(13); //Server error
 		}
 		finally
 		{

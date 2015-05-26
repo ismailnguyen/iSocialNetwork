@@ -41,7 +41,7 @@ class NotificationRead extends BusinessLayer
 					else
 					{
 						$this->addData(array("msg" => 'Notification does not exist'));
-						$this->setCode(24); // NOT ACCEPTABLE: Wrong notification id
+						$this->setCode(9); // NOT ACCEPTABLE: Wrong notification id
 					}
 				}
 				else
@@ -59,19 +59,19 @@ class NotificationRead extends BusinessLayer
 					}
 					else
 					{
-						$this->setCode(27); // CONFLICT: database error
+						$this->setCode(10); // CONFLICT: database error
 					}
 				}
 			}
 			else
 			{
-				$this->setCode(23); // METHOD NOT ALLOWED: Only GET
+				$this->setCode(8); // METHOD NOT ALLOWED: Only GET
 			}
 		}
 		catch(PDOException $e)
 		{
 			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
-			$this->setCode(36); // INTERNAL SERVER ERROR
+			$this->setCode(13); // INTERNAL SERVER ERROR
 		}
 		finally
 		{

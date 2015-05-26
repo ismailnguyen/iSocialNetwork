@@ -27,9 +27,11 @@ class CommentEdit extends BusinessLayer
 				$_user_idUser = $this->getIdUser();
 				$_content = $this->getRequest("content");
 
-        		$params = array(":idComment" => $_idComment,
+        		$params = array(
+								":idComment" => $_idComment,
 								":user_idUser" => $_user_idUser,
-								":content" => $_content);
+								":content" => $_content
+								);
 
 				$statement = $this->m_db->prepare("UPDATE comment
 													
@@ -40,22 +42,25 @@ class CommentEdit extends BusinessLayer
 														
 				if($statement && $statement->execute($params))
 				{
-					$this->addData(array("idComment" => $_idComment,
-											"content" => $_content));
+					$this->addData(array(
+										"idComment" => $_idComment,
+										"content" => $_content
+										));
 				}
 				else
 				{
-					$this->setCode(27); //Error editing comment
+					$this->setCode(10); //Error editing comment
 				}
 			}
 			else
 			{
-				$this->setCode(23); //Request method not accepted
+				$this->setCode(8); //Request method not accepted
 			}
 		}
 		catch(PDOException $e)
 		{
-			$this->setCode(36); //Server error
+			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			$this->setCode(13); //Server error
 		}
 		finally
 		{

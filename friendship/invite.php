@@ -28,10 +28,12 @@ class FriendshipInvite extends BusinessLayer
 				$_createdDate = date("Y-m-d H:i:s");
 				$_state = 0; // 0: Invitation sent | 1: Invitation accepted
 
-        		$params = array(":user_idUser" => $_user_idUser,
+        		$params = array(
+								":user_idUser" => $_user_idUser,
 								":user_idFriend" => $_user_idFriend,
 								":createdDate" => $_createdDate,
-								":state" => $_state);
+								":state" => $_state
+								);
 			
 				$statement = $this->m_db->prepare("SELECT * FROM friendship
 				
@@ -60,27 +62,30 @@ class FriendshipInvite extends BusinessLayer
 					{
 						$this->setCode(2); // Created
 						
-						$this->addData(array("state" => $_state,
-												"createdDate" => $_createdDate));
+						$this->addData(array(
+											"state" => $_state,
+											"createdDate" => $_createdDate
+											));
 					}
 					else
 					{
-						$this->setCode(27); //Error inviting
+						$this->setCode(10); //Error inviting
 					}
 				}
 				else
 				{
-					$this->setCode(18); // Invitation already sent
+					$this->setCode(4); // Invitation already sent
 				}
 			}
 			else
 			{
-				$this->setCode(23); //Request method not accepted
+				$this->setCode(8); //Request method not accepted
 			}
 		}
 		catch(PDOException $e)
 		{
-			$this->setCode(36); //Server error
+			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			$this->setCode(13); //Server error
 		}
 		finally
 		{

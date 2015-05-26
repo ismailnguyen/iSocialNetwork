@@ -26,8 +26,10 @@ class AccountLogin extends BusinessLayer
 				$_email = $this->getRequest("email");
 			 	$_password = hash('sha256', $this->getRequest("password")); // hash password before compare with database content
 
-        		$params = array(":email" => $_email,
-					            ":password" => $_password);
+        		$params = array(
+								":email" => $_email,
+					            ":password" => $_password
+								);
 
 				$statement = $this->m_db->prepare("SELECT *
 													
@@ -42,8 +44,10 @@ class AccountLogin extends BusinessLayer
 					{
 						$_result = $statement->fetch();
 
-						$this->addData(array("idUser" => $_result['idUser'],
-												"token" => $this->getToken($_result['idUser'])));
+						$this->addData(array(
+											"idUser" => $_result['idUser'],
+											"token" => $this->getToken($_result['idUser']))
+											);
 					}
 					else
 					{
@@ -53,17 +57,18 @@ class AccountLogin extends BusinessLayer
 				}
 				else
 				{
-					$this->setCode(18); // BAD REQUEST
+					$this->setCode(4); // BAD REQUEST
 				}
 			}
 			else
 			{
-				$this->setCode(23); // METHOD NOT ALLOWED: Only POST
+				$this->setCode(8); // METHOD NOT ALLOWED: Only POST
 			}
 		}
 		catch(PDOException $e)
 		{
-			$this->setCode(36); // INTERNAL SERVER ERROR
+			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			$this->setCode(13); // INTERNAL SERVER ERROR
 		}
 		finally
 		{

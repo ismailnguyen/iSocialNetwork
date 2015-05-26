@@ -27,8 +27,10 @@ class FriendshipDecline extends BusinessLayer
 				$_user_idFriend = $this->getRequest("idFriend");
 				$_createdDate = date("Y-m-d H:i:s");
 
-        		$params = array(":user_idUser" => $_user_idUser,
-								":user_idFriend" => $_user_idFriend);
+        		$params = array(
+								":user_idUser" => $_user_idUser,
+								":user_idFriend" => $_user_idFriend
+								);
 			
 				$statement = $this->m_db->prepare("SELECT * FROM friendship
 				
@@ -44,22 +46,23 @@ class FriendshipDecline extends BusinessLayer
 															
 					if(!($statement && $statement->execute(array($params))))
           			{
-						$this->setCode(27); //Error declining friendship
+						$this->setCode(10); //Error declining friendship
 					}
 				}
 				else
 				{
-					$this->setCode(18); //Bad request, friendship does not exist
+					$this->setCode(4); //Bad request, friendship does not exist
 				}
 			}
 			else
 			{
-				$this->setCode(23); //Request method not accepted
+				$this->setCode(8); //Request method not accepted
 			}
 		}
 		catch(PDOException $e)
 		{
-			$this->setCode(36); //Server error
+			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			$this->setCode(13); //Server error
 		}
 		finally
 		{

@@ -31,13 +31,15 @@ class AccountSubscribe extends BusinessLayer
 				$_birthdate = $this->getRequest("birthdate");
 				$_createdDate = date("Y-m-d H:i:s");
 
-				$params = array(":firstname" => $_firstname,
+				$params = array(
+								":firstname" => $_firstname,
 								":lastname" => $_lastname,
 								":email" => $_email,
 								":password" => $_password,
 								":gender" => $_gender,
 								":birthdate" => $_birthdate,
-								":createdDate" => $_createdDate);
+								":createdDate" => $_createdDate
+								);
 
 				$statement = $this->m_db->prepare("SELECT * 
 				
@@ -77,34 +79,37 @@ class AccountSubscribe extends BusinessLayer
 							
 							$this->setCode(2); // Created
 							
-							$this->addData(array("idUser" => $_id,
-													"token" => $this->getToken($_id),
-													"createdDate" => $_createdDate));
+							$this->addData(array(
+												"idUser" => $_id,
+												"token" => $this->getToken($_id),
+												"createdDate" => $_createdDate
+												));
 						}
 						else
 						{
-							$this->setCode(27); // CONFLICT: database error
+							$this->setCode(10); // CONFLICT: database error
 						}
 					}
 					else
 					{
 						$this->addData(array("msg" => "User already exist"));
-						$this->setCode(24); // NOT ACCEPTABLE: user already exist
+						$this->setCode(9); // NOT ACCEPTABLE: user already exist
 					}
 				}
 				else
 				{
-					$this->setCode(18); // BAD REQUEST
+					$this->setCode(4); // BAD REQUEST
 				}
 			}
 			else
 			{
-				$this->setCode(23); // METHOD NOT ALLOWED: Only POST
+				$this->setCode(8); // METHOD NOT ALLOWED: Only POST
 			}
 		}
 		catch(PDOException $e)
 		{
-			$this->setCode(36); // INTERNAL SERVER ERROR
+			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			$this->setCode(13); // INTERNAL SERVER ERROR
 		}
 		finally
 		{

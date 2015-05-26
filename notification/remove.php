@@ -26,8 +26,10 @@ class NotificationRemove extends BusinessLayer
 				$_idNotification = $this->getRequest("idNotification");
 				$_user_idUser = $this->getIdUser();				
 
-        		$params = array(":idNotification" => $_idNotification,
-								":user_idUser" => $_user_idUser);
+        		$params = array(
+								":idNotification" => $_idNotification,
+								":user_idUser" => $_user_idUser
+								);
 
 				$statement = $this->m_db->prepare("SELECT * FROM notification
 				
@@ -43,22 +45,23 @@ class NotificationRemove extends BusinessLayer
 					
 					if(!($statement && $statement->execute(array($params))))
           			{
-						$this->setCode(27); //Error removing notification
+						$this->setCode(10); //Error removing notification
 					}
 				}
 				else
 				{
-					$this->setCode(18); //Bad request, notification does not exist
+					$this->setCode(4); //Bad request, notification does not exist
 				}
 			}
 			else
 			{
-				$this->setCode(23); //Request method not accepted
+				$this->setCode(8); //Request method not accepted
 			}
 		}
 		catch(PDOException $e)
 		{
-			$this->setCode(36); //Server error
+			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			$this->setCode(13); //Server error
 		}
 		finally
 		{

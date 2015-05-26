@@ -276,7 +276,7 @@ class BusinessLayer
     {
 		if($this->m_output == "xml")
   		{
-  		  header("HTTP/1.1 ".$this->getError('code')." ".$this->getError('status'));
+			header("HTTP/1.1 ".$this->getError('code')." ".$this->getError('status'));
   			header('Content-type: text/xml');
   			
 			echo '<?xml version="1.0"?>';

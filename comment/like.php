@@ -27,9 +27,11 @@ class CommentLike extends BusinessLayer
 				$_comment_idComment = $this->getRequest("idComment");
 				$_createdDate = date("Y-m-d H:i:s");
 
-        		$params = array(":user_idUser" => $_user_idUser,
+        		$params = array(
+								":user_idUser" => $_user_idUser,
 								":comment_idComment" => $_comment_idComment,
-								":createdDate" => $_createdDate);
+								":createdDate" => $_createdDate
+								);
 
 				$statement = $this->m_db->prepare("SELECT *
 				
@@ -53,7 +55,7 @@ class CommentLike extends BusinessLayer
 					}
 					else
 					{
-						$this->setCode(27); //Error removing like
+						$this->setCode(10); //Error removing like
 					}
 				}
 				else
@@ -77,23 +79,26 @@ class CommentLike extends BusinessLayer
           			{
             			$_idCommentLike = $this->m_db->lastInsertId();
 
-            			$this->addData(array("idComment_like" => $_idComment_like,
-												"createdDate" => $_createdDate));
+            			$this->addData(array(
+											"idComment_like" => $_idComment_like,
+											"createdDate" => $_createdDate
+											));
           			}
 					else
 					{
-						$this->setCode(27); //Error adding like
+						$this->setCode(10); //Error adding like
 					}
 				}
 			}
 			else
 			{
-				$this->setCode(23); //Request method not accepted
+				$this->setCode(8); //Request method not accepted
 			}
 		}
 		catch(PDOException $e)
 		{
-			$this->setCode(36); //Server error
+			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			$this->setCode(13); //Server error
 		}
 		finally
 		{

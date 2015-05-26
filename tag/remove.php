@@ -45,22 +45,23 @@ class TagRemove extends BusinessLayer
 					
 					if(!($statement && $statement->execute(array($params))))
           			{
-						$this->setCode(27); //Error removing tag
+						$this->setCode(10); //Error removing tag
 					}
 				}
 				else
 				{
-					$this->setCode(18); //Bad request, tag does not exist
+					$this->setCode(4); //Bad request, tag does not exist
 				}
 			}
 			else
 			{
-				$this->setCode(23); //Request method not accepted
+				$this->setCode(8); //Request method not accepted
 			}
 		}
 		catch(PDOException $e)
 		{
-			$this->setCode(36); //Server error
+			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			$this->setCode(13); //Server error
 		}
 		finally
 		{

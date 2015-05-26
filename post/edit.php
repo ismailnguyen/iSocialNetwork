@@ -27,9 +27,11 @@ class PostEdit extends BusinessLayer
 				$_user_idUser = $this->getIdUser();
 				$_content = $this->getRequest("content");
 
-        		$params = array":idPost" => $_idPost,
+        		$params = array(
+								":idPost" => $_idPost,
 								":user_idUser" => $_user_idUser,
-								":content" => $_content);
+								":content" => $_content
+								);
 
 				$statement = $this->m_db->prepare("UPDATE post 
 				
@@ -40,22 +42,25 @@ class PostEdit extends BusinessLayer
 														
 				if($statement && $statement->execute($params))
 				{
-					$this->addData(array("idPost" => $_idPost,
-											"content" => $_content));
+					$this->addData(array(
+										"idPost" => $_idPost,
+										"content" => $_content
+										));
 				}
 				else
 				{
-					$this->setCode(27); //Error editing post
+					$this->setCode(10); //Error editing post
 				}
 			}
 			else
 			{
-				$this->setCode(23); //Request method not accepted
+				$this->setCode(8); //Request method not accepted
 			}
 		}
 		catch(PDOException $e)
 		{
-			$this->setCode(36); //Server error
+			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			$this->setCode(13); //Server error
 		}
 		finally
 		{

@@ -26,8 +26,10 @@ class CommentRemove extends BusinessLayer
 				$_idComment = $this->getRequest("idComment");
 				$_User_idUser = $this->getIdUser();				
 
-        		$params = array(":idComment" => $_idComment,
-								":user_idUser" => $_user_idUser);
+        		$params = array(
+								":idComment" => $_idComment,
+								":user_idUser" => $_user_idUser
+								);
 
 				$statement = $this->m_db->prepare("SELECT *
 													
@@ -45,22 +47,23 @@ class CommentRemove extends BusinessLayer
 					
 					if(!($statement && $statement->execute(array($params))))
           			{
-						$this->setCode(27); //Error removing comment
+						$this->setCode(10); // CONFLICT: Error removing comment
 					}
 				}
 				else
 				{
-					$this->setCode(18); //Bad request, comment does not exist
+					$this->setCode(4); //Bad request, comment does not exist
 				}
 			}
 			else
 			{
-				$this->setCode(23); //Request method not accepted
+				$this->setCode(8); //Request method not accepted
 			}
 		}
 		catch(PDOException $e)
 		{
-			$this->setCode(36); //Server error
+			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			$this->setCode(13); //Server error
 		}
 		finally
 		{
