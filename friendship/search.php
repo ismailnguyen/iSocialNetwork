@@ -42,18 +42,13 @@ class FriendshipSearch extends BusinessLayer
 									u.gender,
 									u.birthdate,
 									u.createdDate,
-									f.user_idUser,
-									f.user_idFriend,
 									f.state
-									
-						CASE WHEN f.user_idUser IS NOT NULL THEN
-							f.user_idUser ELSE
-							f.user_idFriend END AS idFriend
 						
 						FROM user u
 						
 						INNER JOIN friendship f
-							ON u.idUser = idFriend
+							ON (u.idUser = f.user_idUser
+								OR u.idUser = f.user_idFriend)
 						
 						WHERE u.firstname LIKE :keyword
 							OR u.lastname LIKE :keyboard
