@@ -33,7 +33,13 @@ class FriendshipRead extends BusinessLayer
 								":limit" => $_limit
 								);
 				
-				$query = "SELECT *
+				$query = "SELECT idUser,
+									firstname,
+									lastname,
+									email,
+									gender,
+									birthdate,
+									createdDate
 						
 						FROM user
 						

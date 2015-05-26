@@ -26,19 +26,40 @@ class FriendshipSearch extends BusinessLayer
 				$_user_idUser = $this->getIdUser();
 				$_offset = $this->getRequest("offset");
 				$_limit = $this->getRequest("limit");
+				$_keyword = $this->getRequest("keyword");
 				
 				$params = array(
 								":user_idUser" => $_user_idUser,
 								":offset" => $_offset,
-								":limit" => $_limit
+								":limit" => $_limit,
+								":keyword" => '%'.$_keyword.'%'
 								);
 				
-				$query = "SELECT *
-				
-						FROM friendship
+				$query = "SELECT u.idUser,
+									u.firstname,
+									u.lastname,
+									u.email,
+									u.gender,
+									u.birthdate,
+									u.createdDate,
+									f.user_idUser,
+									f.user_idFriend,
+									f.state
+									
+						CASE WHEN f.user_idUser IS NOT NULL THEN
+							f.user_idUser ELSE
+							f.user_idFriend END AS idFriend
 						
-						WHERE user_idUser = :user_idUser
-							OR user_idFriend = :user_idUser";
+						FROM user u
+						
+						INNER JOIN friendship f
+							ON u.idUser = idFriend
+						
+						WHERE u.firstname LIKE :keyword
+							OR u.lastname LIKE :keyboard
+							OR u.email LIKE :keyboard					
+						
+						GROUP BY idUser";
 							
 				if($_limit != null)
 					$query .= " LIMIT ".($_offset != null) ? ":offset, " : "".":limit;";
