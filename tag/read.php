@@ -25,6 +25,7 @@ class TagRead extends BusinessLayer
 	    	{
 				$_user_idUser = $this->getIdUser();
 				$_idTag = $this->getRequest("idTag");
+				$_idPost = $this->getRequest("idPost");
 				
 				if($_idTag != null)
 				{
@@ -42,6 +43,24 @@ class TagRead extends BusinessLayer
 					{
 						$this->addData(array("msg" => 'Tag does not exist'));
 						$this->setCode(9); // NOT ACCEPTABLE: Wrong tag id
+					}
+				}
+				elseif($_idPost != null)
+				{
+					$statement = $this->m_db->prepare("SELECT *
+					
+														FROM tag
+														
+														WHERE post_idPost = ?");
+														
+					if($statement && $statement->execute(array($_idPost)))
+					{
+						$this->addData($statement->fetch(PDO::FETCH_ASSOC));
+					}
+					else
+					{
+						$this->addData(array("msg" => 'Post does not exist'));
+						$this->setCode(9); // NOT ACCEPTABLE: Wrong post id
 					}
 				}
 				else
@@ -72,6 +91,11 @@ class TagRead extends BusinessLayer
 		{
 			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
 			$this->setCode(13); // INTERNAL SERVER ERROR
+		}
+		catch(Exception $e)
+		{
+			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			$this->setCode(4); // Bad request
 		}
 		finally
 		{
