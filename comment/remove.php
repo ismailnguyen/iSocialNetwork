@@ -51,8 +51,7 @@ class CommentRemove extends BusinessLayer
 														INNER JOIN comment_tag
 															ON comment.idComment = comment_tag.comment_idComment
 														
-														WHERE
-															AND comment.idComment = :idComment
+														WHERE comment.idComment = :idComment
 															AND comment.user_idUser = :user_idUser
 														");
 					

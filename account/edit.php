@@ -14,7 +14,7 @@ class AccountEdit extends BusinessLayer
 {
 	public function __construct()
 	{
-		parent::__construct(NO_TOKEN);
+		parent::__construct();
 	}
 
 	public function run()
