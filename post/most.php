@@ -1,5 +1,5 @@
 <?php
-/* @File: post/hashtag.php
+/* @File: post/most.php
  *
  *              --- API iSocialNetwork ---
  *
@@ -10,7 +10,7 @@
 
 include("../BusinessLayer.php");
 
-class PostHashtag extends BusinessLayer
+class PostMost extends BusinessLayer
 {
 	public function __construct()
 	{
@@ -26,29 +26,36 @@ class PostHashtag extends BusinessLayer
 				$_user_idUser = $this->getIdUser();
 				$_offset = $this->getRequest("offset");
 				$_limit = $this->getRequest("limit");
-				$_keyword = $this->getRequest("keyword");
 				
 				$params = array(
 								":user_idUser" => $_user_idUser,
 								":offset" => $_offset,
-								":limit" => $_limit,
-								":keyword" => '%'.$_keyword.'%'
+								":limit" => $_limit
 								);
 				
-				$query = "SELECT p.idPost,
-									p.user_idUser
-									p.content,
-									p.createdDate
+				SELECT * FROM User WHERE id_user = (SELECT id_user FROM Loan GROUP BY id_user ORDER BY COUNT(id_user) DESC LIMIT 1)
+				
+				$query = "SELECT idUser,
+									firstname,
+									lastname,
+									email,
+									gender,
+									birthdate,
+									createdDate
 						
-						FROM post
+						FROM user
+							
+						WHERE idUser in (
+										SELECT user_idUser
+								
+										FROM post
+										
+										GROUP BY user_idUser
+										
+										ORDER BY COUNT(user_idUser) DESC
+										)
 						
-						INNER JOIN comment c
-							ON c.post_idPost = p.idPost
-						
-						INNER JOIN comment_tag t
-							ON t.comment_idTag = c.idComment
-						
-						WHERE t.";
+						GROUP BY idUser";
 							
 				if($_limit != null)
 					$query .= " LIMIT ".($_offset != null) ? ":offset, " : "".":limit;";
@@ -86,6 +93,6 @@ class PostHashtag extends BusinessLayer
 	}
 }
 
-$api = new PostHashtag();
+$api = new PostMost();
 $api->run();
 ?>
