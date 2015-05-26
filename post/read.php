@@ -58,7 +58,9 @@ class PostRead extends BusinessLayer
 																				FROM friendship
 																				
 																				WHERE user_idUser = :user_idUser
-																			)");
+																			)
+																			
+														ORDER BY createdDate DESC");
 					
 					if($statement && $statement->execute(array(":user_idUser" => $_user_idUser)))
 					{
