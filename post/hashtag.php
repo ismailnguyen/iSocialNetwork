@@ -26,13 +26,13 @@ class PostHashtag extends BusinessLayer
 				$_user_idUser = $this->getIdUser();
 				$_offset = $this->getRequest("offset");
 				$_limit = $this->getRequest("limit");
-				$_keyword = $this->getRequest("keyword");
+				$_hashtag = str_replace(array('#', '@'), '', $this->getRequest("hashtag"));
 				
 				$params = array(
 								":user_idUser" => $_user_idUser,
 								":offset" => $_offset,
 								":limit" => $_limit,
-								":keyword" => '%'.$_keyword.'%'
+								":hashtag" => '%'.$_hashtag.'%'
 								);
 				
 				$query = "SELECT p.idPost,
@@ -48,7 +48,24 @@ class PostHashtag extends BusinessLayer
 						INNER JOIN comment_tag t
 							ON t.comment_idTag = c.idComment
 						
-						WHERE t.";
+						WHERE t.user_idFriend = (
+												SELECT idUser
+												
+												FROM user
+												
+												WHERE firstname = :hashtag
+													OR lastname = :hashtag
+													OR email = :hashtag
+												)
+							AND (user_idUser = :user_idUser 
+								OR user_idUser in
+												(
+													SELECT user_idFriend
+													
+													FROM friendship
+													
+													WHERE user_idUser = :user_idUser
+												))";
 							
 				if($_limit != null)
 					$query .= " LIMIT ".($_offset != null) ? ":offset, " : "".":limit;";
