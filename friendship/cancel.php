@@ -1,5 +1,5 @@
 <?php
-/* @File: friendship/decline.php
+/* @File: friendship/cancel.php
  *
  *              --- API iSocialNetwork ---
  *
@@ -10,7 +10,7 @@
 
 include("../BusinessLayer.php");
 
-class FriendshipDecline extends BusinessLayer
+class FriendshipCancel extends BusinessLayer
 {
 	public function __construct()
 	{
@@ -34,8 +34,8 @@ class FriendshipDecline extends BusinessLayer
 			
 				$statement = $this->m_db->prepare("SELECT * FROM friendship
 				
-													WHERE user_idUser = :user_idFriend
-														AND user_idFriend = :user_idUser
+													WHERE user_idUser = :user_idUser
+														AND user_idFriend = :user_idFriend
 														AND state = 0");
 														
 				if($statement->execute($params) && $statement->rowCount() == 1)
@@ -48,7 +48,7 @@ class FriendshipDecline extends BusinessLayer
 															
 					if(!($statement && $statement->execute(array($_result['idFriendship']))))
           			{
-						$this->setCode(10); //Error declining friendship
+						$this->setCode(10); //Error canceling friendship
 					}
 				}
 				else
@@ -78,6 +78,6 @@ class FriendshipDecline extends BusinessLayer
 	}
 }
 
-$api = new FriendshipDecline();
+$api = new FriendshipCancel();
 $api->run();
 ?>
