@@ -26,7 +26,7 @@ class PostHashtag extends BusinessLayer
 				$_user_idUser = $this->getIdUser();
 				$_offset = $this->getRequest("offset");
 				$_limit = $this->getRequest("limit");
-				$_hashtag = str_replace(array('#', '@'), '', $this->getRequest("hashtag"));
+				$_hashtag = str_replace('#', '', $this->getRequest("hashtag"));
 				
 				$params = array(
 								":user_idUser" => $_user_idUser,

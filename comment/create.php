@@ -27,6 +27,12 @@ class CommentCreate extends BusinessLayer
 				$_post_idPost = $this->getRequest("idPost");
 				$_content = $this->getRequest("content");
 				$_createdDate = date("Y-m-d H:i:s");
+				
+				$_hashtag = array();
+				
+				preg_match_all('/(#\w+)/', $_content, $_matches);
+				foreach ($_matches[0] as $_ht)
+					$_hashtag[] = '%'.$_ht.'%';
 
         		$params = array(
 								":user_idUser" => $_user_idUser,
@@ -71,6 +77,48 @@ class CommentCreate extends BusinessLayer
 												"idComment" => $_idComment,
 												"createdDate" => $_createdDate
 												));
+							
+							foreach($_hashtag as $_h)
+							{
+								$statement = $this->m_db->prepare("SELECT TOP 1 idUser
+								
+																	FROM user
+																	
+																	WHERE firstname LIKE :hashtag
+																		OR lastname LIKE :hashtag
+																		OR email LIKE :hashtag");
+																	
+								if($statement && $statement->execute(array(":hashtag" => $_h)))
+								{
+									$_result = $statement->fetch(PDO::FETCH_ASSOC);
+									
+									$statement = $this->m_db->prepare("INSERT INTO comment_tag
+																		(
+																			user_idUser,
+																			user_idFriend,
+																			comment_idComment,
+																			createdDate
+																		)
+																		
+																		VALUES
+																		(
+																			:user_idUser,
+																			:user_idFriend,
+																			:comment_idComment,
+																			:createdDate
+																		)");
+																
+									if(!($statement && $statement->execute(array(
+																				":user_idUser" => _user_idUser,
+																				":user_idFriend" => $_result['idUser'],
+																				":comment_idComment" => $_idComment,
+																				":createdDate" => $_createdDate
+																				))))
+									{
+										$this->setCode(10); // CONFLICT: database error
+									}
+								}
+							}
 						}
 						else
 						{

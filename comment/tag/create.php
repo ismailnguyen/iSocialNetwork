@@ -40,7 +40,7 @@ class CommentTagCreate extends BusinessLayer
 													WHERE idComment = :comment_idComment
 														AND user_idUser = :user_idUser");
 														
-				if($statement->execute($params))
+				if($statement->execute($params) && $statement->rowCount() == 1)
 				{
 					$statement = $this->m_db->prepare("INSERT INTO comment_tag
 														(
