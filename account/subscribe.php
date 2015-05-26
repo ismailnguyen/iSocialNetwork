@@ -22,7 +22,7 @@ class AccountSubscribe extends BusinessLayer
 		try
 		{
 			if($this->getMethod() == "POST")
-	    {
+			{
 				$_firstname = $this->getRequest("firstname");
 				$_lastname = $this->getRequest("lastname");
 				$_email = $this->getRequest("email");
@@ -110,6 +110,11 @@ class AccountSubscribe extends BusinessLayer
 		{
 			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
 			$this->setCode(13); // INTERNAL SERVER ERROR
+		}
+		catch(Exception $e)
+		{
+			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			$this->setCode(4); // Bad request
 		}
 		finally
 		{

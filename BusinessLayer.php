@@ -12,7 +12,7 @@ include("DatabaseLayer.php");
 
 class BusinessLayer
 {
-	private $m_code = 0; // Response code
+	private $m_code = 1; // Response code
 	private $m_data = array(); // Response datas
 	private $m_request = array(); // Request datas
 	private $m_output; // Output format: xml, json
@@ -55,7 +55,7 @@ class BusinessLayer
 		catch(Exception $e)
 		{
 			$this->addData(array("error" => $e->getMessage()));
-			$this->setCode(39); // Service unavailable
+			$this->setCode(13); // Service unavailable
 			$this->response();
 		}
     }
@@ -103,7 +103,7 @@ class BusinessLayer
 		{
 			throw new Exception($e->getMessage());
 			//$this->addData(array("error" => $e->getMessage()));
-        	//$this->setCode(18); // Bad Request
+        	//$this->setCode(4); // Bad Request
         	//$this->response();
 		}
 	}

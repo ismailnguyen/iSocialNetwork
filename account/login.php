@@ -52,7 +52,7 @@ class AccountLogin extends BusinessLayer
 					else
 					{
 						$this->addData(array("msg" => 'Wrong email/password'));
-						$this->setCode(24); // NOT ACCEPTABLE: Wrong email/password
+						$this->setCode(9); // NOT ACCEPTABLE: Wrong email/password
 					}
 				}
 				else
@@ -69,6 +69,11 @@ class AccountLogin extends BusinessLayer
 		{
 			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
 			$this->setCode(13); // INTERNAL SERVER ERROR
+		}
+		catch(Exception $e)
+		{
+			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			$this->setCode(4); // Bad request
 		}
 		finally
 		{

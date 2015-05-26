@@ -38,7 +38,7 @@ class PostLike extends BusinessLayer
 													WHERE user_idUser = :user_idUser
 														AND post_idPost = :post_idPost");
 														
-				if($statement->execute($params))
+				if($statement->execute($params) && $statement->rowCount() == 1)
 				{
 					//Unlike if like already exist
 					$result = $statement->fetch();
@@ -100,7 +100,12 @@ class PostLike extends BusinessLayer
 		catch(PDOException $e)
 		{
 			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
-			$this->setCode(13); //Server error
+			$this->setCode(13); // INTERNAL SERVER ERROR
+		}
+		catch(Exception $e)
+		{
+			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			$this->setCode(4); // Bad request
 		}
 		finally
 		{

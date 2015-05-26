@@ -40,7 +40,7 @@ class CommentLike extends BusinessLayer
 													WHERE user_idUser = :user_idUser
 														AND comment_idComment = :comment_idComment");
 														
-				if($statement->execute($params))
+				if($statement->execute($params) && $statement->rowCount() == 1)
 				{
 				  	//Unlike if like already exist
 				  	$result = $statement->fetch();
@@ -78,6 +78,8 @@ class CommentLike extends BusinessLayer
 					if($statement && $statement->execute($params))
           			{
             			$_idCommentLike = $this->m_db->lastInsertId();
+						
+						$this->setCode(2); // Created
 
             			$this->addData(array(
 											"idComment_like" => $_idComment_like,
