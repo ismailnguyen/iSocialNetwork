@@ -23,37 +23,37 @@ class PostMost extends BusinessLayer
 		{
 			if($this->getMethod() == "GET")
 	    	{
+				$_user_idUser = $this->getIdUser();
 				$_offset = $this->getRequest("offset");
 				$_limit = $this->getRequest("limit");
 				
 				$params = array(
+								":user_idUser" => $_user_idUser,
 								":offset" => $_offset,
 								":limit" => $_limit
 								);
 				
 				SELECT * FROM User WHERE id_user = (SELECT id_user FROM Loan GROUP BY id_user ORDER BY COUNT(id_user) DESC LIMIT 1)
 				
-				$query = "SELECT idUser,
-									firstname,
-									lastname,
-									email,
-									gender,
-									birthdate,
-									createdDate
+				$query = "SELECT p.idPost
+									p.content,
+									p.createdDate
 						
-						FROM user
-							
-						WHERE idUser in (
-										SELECT user_idUser
-								
-										FROM post
-										
-										GROUP BY user_idUser
-										
-										ORDER BY COUNT(user_idUser) DESC
-										)
+						FROM user u
 						
-						GROUP BY idUser";
+						INNER JOIN post p
+							ON p.user_idUser = u.idUser
+						
+						WHERE u.idUser = :user_idUser
+							AND p.idPost in (
+											SELECT post_idPost
+									
+											FROM post_like
+											
+											GROUP BY post_idPost
+											
+											ORDER BY COUNT(post_idPost) DESC
+											)";
 							
 				if($_limit != null)
 					$query .= " LIMIT ".($_offset != null) ? ":offset, " : "".":limit;";
