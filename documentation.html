@@ -21,8 +21,8 @@
                         <div class="preview-wrapper ng-scope">
                             <div class="error-presenter error">
                                 <header class="error-header">
-                                    <h4 class="ng-binding">ESGI</h4><span class=
-                                    "collapse-button ng-binding">3A AL - 2014/2015</span>
+                                    <h4 class="ng-binding">iSocialNetwork API</h4><span class=
+                                    "collapse-button ng-binding">ESGI - 3A AL - 2014/2015</span>
                                 </header>
 
                                 <div class="item ng-scope">
@@ -37,16 +37,26 @@
 
                             <div class="info ng-scope">
                                 <header class="info-header">
-                                    <h3 class="section-header"><a class="ng-binding">iSocialNetwork API</a></h3>
+                                    <h3 class="section-header"><a class="ng-binding">Overview</a></h3>
                                 </header>
 
                                 <div class="info-container section-content">
-                                    <div class="ng-isolate-scope">
-                                        <p></p>
-                                    </div>
-
-                                    <h4>Version <span class=
+									<div class="ng-isolate-scope">
+                                        <p>
+											<h4>Authentication headers</h4>
+											In order to authenticate yourself to the service, you need to use the <b>Authorization</b> header for authentication 
+											and <b>Basic Authorization</b> (username: user ID, password: token). Each user has its own API token, allowing you to isolate access and data for each application that connects to iSocialNetwork.
+											The header name and value are case insensitive. Should you execute the request with wrong or missing headers, you will receive an HTTP Response 401 (Unauthorized).
+											The token and the unique user identifier are given after login or subscription.
+											<br><br>
+											<h4>Output format</h4>
+											By default settings, iSocialNetwork will return <b>JSON</b> format message.
+											In case you want to the response be XML format, you need to send <b>output</b> field in HTTP request with you format value (eg. xml).<br><br>
+										</p>
+										
+										<h4>Version <span class=
                                     "ng-binding">1.0.0</span></h4>
+                                    </div>
                                 </div>
                             </div>
 
@@ -1134,10 +1144,29 @@
                                                 "try-operation ng-scope">
                                                     Exemple:<br>
 													<b>Request</b><br>
-													
-													
+													POST /iSocialNetwork/account/login.php HTTP/1.1<br>
+													Host: localhost<br>
+													Authorization: Basic NDphOWZhZmI3YmZmZGVmMWQyOWJkYjY1YzQ2YWYxYzNkZDU4NDNjN2M0NzJkNDEzOThmNmI3NDM2OWMxYjk4NWQ3<br>
+													Cache-Control: no-cache<br>
+													<br>
+													----WebKitFormBoundaryE19zNvXGzXaLvS5C<br>
+													Content-Disposition: form-data; name="email"<br>
+													<br>
+													nguyen.ismail@gmail.com<br>
+													----WebKitFormBoundaryE19zNvXGzXaLvS5C<br>
+													Content-Disposition: form-data; name="password"<br>
+													<br>
+													kaka123<br>
+													----WebKitFormBoundaryE19zNvXGzXaLvS5C
 													<br><br>
 													<b>Response</b><br>
+													{<br>
+													&emsp;"code": 1,<br>
+													&emsp;"result": {<br>
+													&emsp;&emsp;"idUser": "1",<br>
+													&emsp;&emsp;"token": "a39019ae10f6a0fd1454b67035714d58c803966ecbbcf95b9f285ec013e4622d"<br>
+													&emsp;}<br>
+													}<br>
                                                 </section>
                                             </div>
                                         </li>
