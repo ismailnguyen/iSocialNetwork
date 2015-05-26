@@ -40,10 +40,21 @@ class CommentRemove extends BusinessLayer
 				
 				if($statement->execute($params) && $statement->rowCount() == 1)
 				{  
-					$statement = $this->m_db->prepare("DELETE FROM comment
-													
-														WHERE idComment = :idComment 
-															AND user_idUser = :user_idUser");
+					$statement = $this->m_db->prepare("DELETE comment,
+																comment_like,
+																comment_tag
+														
+														FROM comment
+														
+														INNER JOIN comment_like
+															ON comment.idComment = comment_like.comment_idComment
+														INNER JOIN comment_tag
+															ON comment.idComment = comment_tag.comment_idComment
+														
+														WHERE
+															AND comment.idComment = :idComment
+															AND comment.user_idUser = :user_idUser
+														");
 					
 					if(!($statement && $statement->execute(array($params))))
           			{

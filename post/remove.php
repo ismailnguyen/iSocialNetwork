@@ -36,24 +36,33 @@ class PostRemove extends BusinessLayer
 														
 				if($statement->execute($params) && $statement->rowCount() == 1)
 				{  
-					$statement = $this->m_db->prepare("DELETE FROM post
+					$statement = $this->m_db->prepare("DELETE post,
+																post_like,
+																post_tag,
+																comment,
+																comment_like,
+																comment_tag
+														
+														FROM post
+														
+														INNER JOIN post_like
+															ON post.idPost = post_like.post_idPost
+														INNER_JOIN post_tag
+															ON post.idPost = post_tag.post_idPost
+														INNER JOIN comment
+															ON post.idPost = comment.post_idPost
+														INNER JOIN comment_like
+															ON comment.idComment = comment_like.comment_idComment
+														INNER JOIN comment_tag
+															ON comment.idComment = comment_tag.comment_idComment
+														
+														WHERE
+															AND post.idPost = :idPost
+															AND post.user_idUser = :user_idUser
+														");
 					
-														WHERE idPost = :idPost
-															AND user_idUser = :user_idUser");
-					
-					if($statement && $statement->execute(array($params)))
-          			{
-						$statement = $this->m_db->prepare("DELETE FROM comment
-					
-														WHERE post_idPost = :idPost");
-															
-						if(!($statement && $statement->execute(array($params))))
-						{
-							$this->setCode(10); //Error removing comments of the post
-						}
-					}
-					else
-					{
+					if(!($statement && $statement->execute(array($params))))
+          			{													
 						$this->setCode(10); //Error removing post
 					}
 				}
