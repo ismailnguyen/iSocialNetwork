@@ -1,5 +1,5 @@
 <?php
-/* @File: friendship/search.php
+/* @File: friendship/read.php
  *
  *              --- API iSocialNetwork ---
  *
@@ -10,7 +10,7 @@
 
 include("../BusinessLayer.php");
 
-class FriendshipSearch extends BusinessLayer
+class PostHashtag extends BusinessLayer
 {
 	public function __construct()
 	{
@@ -35,30 +35,20 @@ class FriendshipSearch extends BusinessLayer
 								":keyword" => '%'.$_keyword.'%'
 								);
 				
-				$query = "SELECT u.idUser,
-									u.firstname,
-									u.lastname,
-									u.email,
-									u.gender,
-									u.birthdate,
-									u.createdDate,
+				$query = "SELECT p.idPost,
+									p.user_idUser
+									p.content,
+									p.createdDate
 						
-						CASE f.state
-							WHEN 1 THEN 'True'
-							ELSE 'False'
-						END as isFriend
+						FROM post
 						
-						FROM user u
+						INNER JOIN comment c
+							ON c.post_idPost = p.idPost
 						
-						INNER JOIN friendship f
-							ON (u.idUser = f.user_idUser
-								OR u.idUser = f.user_idFriend)
+						INNER JOIN comment_tag t
+							ON t.comment_idTag = c.idComment
 						
-						WHERE u.firstname LIKE :keyword
-							OR u.lastname LIKE :keyboard
-							OR u.email LIKE :keyboard					
-						
-						GROUP BY idUser";
+						WHERE";
 							
 				if($_limit != null)
 					$query .= " LIMIT ".($_offset != null) ? ":offset, " : "".":limit;";
@@ -96,6 +86,6 @@ class FriendshipSearch extends BusinessLayer
 	}
 }
 
-$api = new FriendshipSearch();
+$api = new PostHashtag();
 $api->run();
 ?>
