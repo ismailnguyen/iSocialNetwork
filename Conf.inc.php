@@ -8,6 +8,8 @@
  *               ESGI - 3A AL - 2014/2015
  */
 
+session_start();
+ 
 define("DEBUG", true); //false
 
 

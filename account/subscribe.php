@@ -82,8 +82,16 @@ class AccountSubscribe extends BusinessLayer
 							$this->addData(array(
 												"idUser" => $_id,
 												"token" => $this->getToken($_id),
+												"firstname" => $_firstname,
+												"lastname" => $_lastname,
+												"email" => $_email,
+												"password" => $_password,
+												"gender" => $_gender,
+												"birthdate" => $_birthdate,
 												"createdDate" => $_createdDate
 												));
+												
+							$_SESSION[$_result['idUser']] = $this->getToken($_result['idUser']));
 						}
 						else
 						{

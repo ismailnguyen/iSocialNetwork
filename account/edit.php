@@ -55,7 +55,15 @@ class AccountEdit extends BusinessLayer
 
 														WHERE idUser = :idUser");
 						
-						$this->addData($params);
+						$this->addData(array(
+												"idUser" => $_id,
+												"firstname" => $_firstname,
+												"lastname" => $_lastname,
+												"email" => $_email,
+												"password" => $_password,
+												"gender" => $_gender,
+												"birthdate" => $_birthdate
+												));
 				}
 				else
 				{

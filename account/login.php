@@ -46,8 +46,17 @@ class AccountLogin extends BusinessLayer
 
 						$this->addData(array(
 											"idUser" => $_result['idUser'],
-											"token" => $this->getToken($_result['idUser']))
+											"token" => $this->getToken($_result['idUser'])),
+											"firstname" => $_result['firstname'],
+											"lastname" => $_result['lastname'],
+											"email" => $_result['email'],
+											"password" => $_result['password'],
+											"gender" => $_result['gender'],
+											"birthdate" => $_result['birthdate'],
+											"createdDate" => $_result['createdDate']
 											);
+											
+						$_SESSION[$_result['idUser']] = $this->getToken($_result['idUser']));
 					}
 					else
 					{

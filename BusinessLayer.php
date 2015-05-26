@@ -72,7 +72,9 @@ class BusinessLayer
 
     public function checkToken($_token)
     {
-        if($this->getToken($this->getRequest("idUser")) == $_token)
+        if($this->getToken($this->getRequest("idUser")) == $_token
+			&& isset($_SESSION[$this->getRequest("idUser")])
+			&& $_SESSION[$this->getRequest("idUser")] == $_token)
             return true;
 
         return false;
