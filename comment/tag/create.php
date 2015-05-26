@@ -1,5 +1,5 @@
 <?php
-/* @File: tag/create.php
+/* @File: comment/tag/create.php
  *
  *              --- API iSocialNetwork ---
  *
@@ -8,9 +8,9 @@
  *               ESGI - 3A AL - 2014/2015
  */
 
-include("../BusinessLayer.php");
+include("../../BusinessLayer.php");
 
-class TagCreate extends BusinessLayer
+class CommentTagCreate extends BusinessLayer
 {
 	public function __construct()
 	{
@@ -25,28 +25,28 @@ class TagCreate extends BusinessLayer
 	    	{
 				$_user_idUser = $this->getIdUser();
 				$_user_idFriend = $this->getRequest("idFriend");
-				$_post_idPost = $this->getRequest("idPost");
+				$_comment_idComment = $this->getRequest("idComment");
 				$_createdDate = date("Y-m-d H:i:s");
 
         		$params = array(
 								":user_idUser" => $_user_idUser,
 								":user_idFriend" => $_user_idFriend,
-								":post_idPost" = > $_post_idPost,
+								":comment_idComment" = > $_comment_idComment,
 								":createdDate" => $_createdDate
 								);
 
-				$statement = $this->m_db->prepare("SELECT * FROM post
+				$statement = $this->m_db->prepare("SELECT * FROM comment
 				
-													WHERE idPost = :post_idPost
+													WHERE idComment = :comment_idComment
 														AND user_idUser = :user_idUser");
 														
 				if($statement->execute($params))
 				{
-					$statement = $this->m_db->prepare("INSERT INTO tag
+					$statement = $this->m_db->prepare("INSERT INTO comment_tag
 														(
 															user_idUser,
 															user_idFriend,
-															post_idPost,
+															comment_idComment,
 															createdDate
 														)
 														
@@ -54,7 +54,7 @@ class TagCreate extends BusinessLayer
 														(
 															:user_idUser,
 															:user_idFriend,
-															:post_idPost,
+															:comment_idComment,
 															:createdDate
 														)");
 														
@@ -97,6 +97,6 @@ class TagCreate extends BusinessLayer
 	}
 }
 
-$api = new TagCreate();
+$api = new CommentTagCreate();
 $api->run();
 ?>

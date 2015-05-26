@@ -1,5 +1,5 @@
 <?php
-/* @File: tag/read.php
+/* @File: post/tag/read.php
  *
  *              --- API iSocialNetwork ---
  *
@@ -8,9 +8,9 @@
  *               ESGI - 3A AL - 2014/2015
  */
 
-include("../BusinessLayer.php");
+include("../../BusinessLayer.php");
 
-class TagRead extends BusinessLayer
+class PostTagRead extends BusinessLayer
 {
 	public function __construct()
 	{
@@ -31,7 +31,7 @@ class TagRead extends BusinessLayer
 				{
 					$statement = $this->m_db->prepare("SELECT *
 					
-														FROM tag
+														FROM post_tag
 														
 														WHERE idTag = ?");
 														
@@ -49,7 +49,7 @@ class TagRead extends BusinessLayer
 				{
 					$statement = $this->m_db->prepare("SELECT *
 					
-														FROM tag
+														FROM post_tag
 														
 														WHERE post_idPost = ?");
 														
@@ -67,7 +67,7 @@ class TagRead extends BusinessLayer
 				{
 					$statement = $this->m_db->prepare("SELECT *
 					
-														FROM tag
+														FROM post_tag
 														
 														WHERE user_idFriend = :user_idUser 
 													");
@@ -104,6 +104,6 @@ class TagRead extends BusinessLayer
 	}
 }
 
-$api = new TagRead();
+$api = new PostTagRead();
 $api->run();
 ?>

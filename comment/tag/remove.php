@@ -1,5 +1,5 @@
 <?php
-/* @File: tag/remove.php
+/* @File: comment/tag/remove.php
  *
  *              --- API iSocialNetwork ---
  *
@@ -8,9 +8,9 @@
  *               ESGI - 3A AL - 2014/2015
  */
 
-include("../BusinessLayer.php");
+include("../../BusinessLayer.php");
 
-class TagRemove extends BusinessLayer
+class CommentTagRemove extends BusinessLayer
 {
 	public function __construct()
 	{
@@ -31,14 +31,14 @@ class TagRemove extends BusinessLayer
 								":user_idUser" => $_user_idUser
 								);
 
-				$statement = $this->m_db->prepare("SELECT * FROM tag
+				$statement = $this->m_db->prepare("SELECT * FROM comment_tag
 				
 													WHERE idTag = :idTag
 														AND user_idUser = :user_idUser");
 														
 				if($statement->execute($params) && $statement->rowCount() == 1)
 				{  
-					$statement = $this->m_db->prepare("DELETE FROM tag
+					$statement = $this->m_db->prepare("DELETE FROM comment_tag
 					
 														WHERE idTag = :idTag
 															AND user_idUser = :user_idUser");
@@ -75,6 +75,6 @@ class TagRemove extends BusinessLayer
 	}
 }
 
-$api = new TagRemove();
+$api = new CommentTagRemove();
 $api->run();
 ?>
