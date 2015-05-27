@@ -23,16 +23,9 @@ class PostMost extends BusinessLayer
 		{
 			if($this->getMethod() == "GET")
 	    	{
-				$_offset = $this->getRequest("offset");
-				$_limit = $this->getRequest("limit");
-				
-				$params = array(
-								":offset" => $_offset,
-								":limit" => $_limit
-								);
-				
-				SELECT * FROM User WHERE id_user = (SELECT id_user FROM Loan GROUP BY id_user ORDER BY COUNT(id_user) DESC LIMIT 1)
-				
+				$_offset = (int) $this->getRequest("offset");
+				$_limit = (int) $this->getRequest("limit");
+								
 				$query = "SELECT idUser,
 									firstname,
 									lastname,
@@ -53,14 +46,15 @@ class PostMost extends BusinessLayer
 										ORDER BY COUNT(user_idUser) DESC
 										)
 						
-						GROUP BY idUser";
-							
-				if($_limit != null)
-					$query .= " LIMIT ".($_offset != null) ? ":offset, " : "".":limit;";
+						GROUP BY idUser
+						
+						LIMIT :offset, :limit";
 				
 				$statement = $this->m_db->prepare($query);
+				$statement->bindParam(':offset', $_offset, PDO::PARAM_INT);
+				$statement->bindParam(':limit', $_limit, PDO::PARAM_INT);
 				
-				if($statement && $statement->execute($params))
+				if($statement && $statement->execute())
 				{
 					$this->addData($statement->fetchAll(PDO::FETCH_ASSOC));
 				}

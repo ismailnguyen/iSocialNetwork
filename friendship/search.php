@@ -24,9 +24,9 @@ class FriendshipSearch extends BusinessLayer
 			if($this->getMethod() == "GET")
 	    	{
 				$_user_idUser = $this->getIdUser();
-				$_offset = $this->getRequest("offset");
-				$_limit = $this->getRequest("limit");
-				$_keyword = $this->getRequest("keyword").'%';
+				$_offset = (int) $this->getRequest("offset");
+				$_limit = (int) $this->getRequest("limit");
+				$_keyword = '%'.$this->getRequest("keyword").'%';
 				
 				$query = "SELECT u.idUser,
 									u.firstname,
@@ -43,15 +43,15 @@ class FriendshipSearch extends BusinessLayer
 						
 						FROM user u
 						
-						INNER JOIN friendship f
-							ON (u.idUser = f.user_idUser
-								OR u.idUser = f.user_idFriend)
+						JOIN friendship f
+							ON (f.user_idUser = u.idUser
+								OR f.user_idFriend = u.idUser)
 						
 						WHERE (u.firstname LIKE :key_firstname
 							OR u.lastname LIKE :key_lastname
 							OR u.email LIKE :key_email)
 							
-							AND u.idUser = :user_idUser
+						AND u.idUser = :user_idUser
 						
 						GROUP BY u.idUser
 						

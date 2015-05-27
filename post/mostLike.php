@@ -24,8 +24,8 @@ class PostMost extends BusinessLayer
 			if($this->getMethod() == "GET")
 	    	{
 				$_user_idUser = $this->getIdUser();
-				$_offset = $this->getRequest("offset");
-				$_limit = $this->getRequest("limit");
+				$_offset = (int) $this->getRequest("offset");
+				$_limit = (int) $this->getRequest("limit");
 				
 				$params = array(
 								":user_idUser" => $_user_idUser,
