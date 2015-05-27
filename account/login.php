@@ -42,11 +42,11 @@ class AccountLogin extends BusinessLayer
 				{
 					if($statement->rowCount() == 1)
 					{
-						$_result = $statement->fetch();
-
+						$_result = $statement->fetch(PDO::FETCH_ASSOC);
+											
 						$this->addData(array(
 											"idUser" => $_result['idUser'],
-											"token" => $this->getToken($_result['idUser'])),
+											"token" => $this->getToken($_result['idUser']),
 											"firstname" => $_result['firstname'],
 											"lastname" => $_result['lastname'],
 											"email" => $_result['email'],
@@ -54,9 +54,9 @@ class AccountLogin extends BusinessLayer
 											"gender" => $_result['gender'],
 											"birthdate" => $_result['birthdate'],
 											"createdDate" => $_result['createdDate']
-											);
+											));						
 											
-						$_SESSION[$_result['idUser']] = $this->getToken($_result['idUser']));
+						$_SESSION['idUser'.$_result['idUser']] = $this->getToken($_result['idUser']);
 					}
 					else
 					{
