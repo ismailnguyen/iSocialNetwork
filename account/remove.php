@@ -25,7 +25,34 @@ class AccountRemove extends BusinessLayer
 	    	{
 				$_user_idUser = $this->getIdUser();				
  
-				$statement = $this->m_db->prepare("DELETE post,
+				$statement = $this->m_db->prepare("DELETE FROM comment_tag
+													WHERE user_idUser = :idUser
+														OR user_idFriend = :idUser;
+													
+													DELETE FROM comment_like
+													WHERE user_idUser = :idUser;
+													
+													DELETE FROM post_tag
+													WHERE user_idUser = :idUser
+														OR user_idFriend = :idUser;
+														
+													DELETE FROM post_like
+													WHERE user_idUser = :idUser;
+													
+													DELETE comment,
+															comment_like,
+															comment_tag
+														
+													FROM comment
+													
+													LEFT JOIN comment_like
+														ON comment.idComment = comment_like.comment_idComment
+													LEFT JOIN comment_tag
+														ON comment.idComment = comment_tag.comment_idComment
+													
+													WHERE comment.user_idUser = :idUser;
+													
+													DELETE post,
 															post_like,
 															post_tag,
 															comment,
@@ -46,35 +73,7 @@ class AccountRemove extends BusinessLayer
 														ON comment.idComment = comment_tag.comment_idComment
 													
 													WHERE post.user_idUser = :idUser;
-													
-													
-													DELETE comment,
-															comment_like,
-															comment_tag
-														
-													FROM comment
-													
-													LEFT JOIN comment_like
-														ON comment.idComment = comment_like.comment_idComment
-													LEFT JOIN comment_tag
-														ON comment.idComment = comment_tag.comment_idComment
-													
-													WHERE comment.user_idUser = :idUser;
-													
-													DELETE FROM post_like
-													WHERE user_idUser = :idUser;
-													
-													DELETE FROM post_tag
-													WHERE user_idUser = :idUser
-														OR user_idFriend = :idUser;
-													
-													DELETE FROM comment_like
-													WHERE user_idUser = :idUser;
-													
-													DELETE FROM comment_tag
-													WHERE user_idUser = :idUser
-														OR user_idFriend = :idUser;
-														
+																			
 													DELETE FROM notification
 													WHERE user_idUser = :idUser;
 													
