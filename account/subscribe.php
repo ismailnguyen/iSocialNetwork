@@ -91,7 +91,7 @@ class AccountSubscribe extends BusinessLayer
 												"createdDate" => $_createdDate
 												));
 												
-							$_SESSION[$_result['idUser']] = $this->getToken($_result['idUser']));
+							$_SESSION['idUser'.$_id] = $this->getToken($_id));
 						}
 						else
 						{

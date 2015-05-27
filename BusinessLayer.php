@@ -74,7 +74,7 @@ class BusinessLayer
     {
         if($this->getToken($this->getRequest("idUser")) == $_token
 			&& isset($_SESSION[$this->getRequest("idUser")])
-			&& $_SESSION[$this->getRequest("idUser")] == $_token)
+			&& $_SESSION['idUser'.$this->getRequest("idUser")] == $_token)
             return true;
 
         return false;
