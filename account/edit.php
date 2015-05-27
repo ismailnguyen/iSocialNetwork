@@ -40,21 +40,20 @@ class AccountEdit extends BusinessLayer
 								":gender" => $_gender,
 								":birthdate" => $_birthdate,
 								);
-													
-				if($statement->execute(array($params)))
-				{
-
-					$statement = $this->m_db->prepare("UPDATE user
-							
-														SET firstname = :firstname, 
-															lastname = :lastname, 
-															email = :email, 
-															password = :password, 
-															gender = :gender, 
-															birthdate = :birthdate
-
-														WHERE idUser = :idUser");
+				
+				$statement = $this->m_db->prepare("UPDATE user
 						
+													SET firstname = :firstname, 
+														lastname = :lastname, 
+														email = :email, 
+														password = :password, 
+														gender = :gender, 
+														birthdate = :birthdate
+
+													WHERE idUser = :idUser");
+				
+				if($statement->execute(array($params)))
+				{		
 						$this->addData(array(
 												"idUser" => $_id,
 												"firstname" => $_firstname,
@@ -67,7 +66,7 @@ class AccountEdit extends BusinessLayer
 				}
 				else
 				{
-					$this->setCode(4); // BAD REQUEST
+					$this->setCode(10);
 				}
 			}
 			else
