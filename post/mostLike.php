@@ -1,5 +1,5 @@
 <?php
-/* @File: post/most.php
+/* @File: post/mostLike.php
  *
  *              --- API iSocialNetwork ---
  *
