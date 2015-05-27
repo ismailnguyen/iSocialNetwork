@@ -85,7 +85,7 @@ class AccountRemove extends BusinessLayer
 													DELETE FROM user
 													WHERE idUser = :idUser;
 													");
-				
+													
 				if(!($statement && $statement->execute(array(":idUser" => $_user_idUser))))
 				{													
 					$this->setCode(10); //Error removing user

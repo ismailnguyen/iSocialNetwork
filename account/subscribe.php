@@ -51,27 +51,7 @@ class AccountSubscribe extends BusinessLayer
 				{
 					if($statement->rowCount() == 0)
 					{
-						$statement = $this->m_db->prepare("INSERT INTO user
-															(
-																firstname, 
-																lastname, 
-																email, 
-																password, 
-																gender, 
-																birthdate, 
-																createdDate
-															)
-															
-															VALUES 
-															(
-																:firstname, 
-																:lastname, 
-																:email, 
-																:password, 
-																:gender, 
-																:birthdate, 
-																:createdDate
-															)");
+						$statement = $this->m_db->prepare("INSERT INTO user (firstname, lastname, email, password, gender, birthdate, createdDate) VALUES(:firstname, :lastname, :email, :password, :gender, :birthdate, :createdDate)");
 															
 						if($statement && $statement->execute($params))
 						{
@@ -91,7 +71,7 @@ class AccountSubscribe extends BusinessLayer
 												"createdDate" => $_createdDate
 												));
 												
-							$_SESSION['idUser'.$_id] = $this->getToken($_id));
+							$_SESSION['idUser'.$_id] = $this->getToken($_id);
 						}
 						else
 						{
@@ -117,6 +97,7 @@ class AccountSubscribe extends BusinessLayer
 		catch(PDOException $e)
 		{
 			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+
 			$this->setCode(13); // INTERNAL SERVER ERROR
 		}
 		catch(Exception $e)
