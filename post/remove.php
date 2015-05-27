@@ -21,7 +21,7 @@ class PostRemove extends BusinessLayer
 	{
 		try
 		{
-			if($this->getMethod() == "DELETE")
+			if($this->getMethod() == "POST")
 	    	{
 				$_idPost = $this->getRequest("idPost");
 				$_user_idUser = $this->getIdUser();				
@@ -33,9 +33,12 @@ class PostRemove extends BusinessLayer
 				
 													WHERE idPost = :idPost
 														AND user_idUser = :user_idUser");
-														
+												
 				if($statement->execute($params) && $statement->rowCount() == 1)
-				{  
+				{
+					$_result = $statement->fetch(PDO::FETCH_ASSOC);
+					$_idPost = $_result['idPost'];
+					
 					$statement = $this->m_db->prepare("DELETE post,
 																post_like,
 																post_tag,
@@ -56,11 +59,9 @@ class PostRemove extends BusinessLayer
 														INNER JOIN comment_tag
 															ON comment.idComment = comment_tag.comment_idComment
 														
-														WHERE post.idPost = :idPost
-															AND post.user_idUser = :user_idUser
-														");
+														WHERE post.idPost = ?");
 					
-					if(!($statement && $statement->execute(array($params))))
+					if(!($statement && $statement->execute(array($_idPost))))
           			{													
 						$this->setCode(10); //Error removing post
 					}

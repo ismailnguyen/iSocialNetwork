@@ -26,14 +26,7 @@ class FriendshipSearch extends BusinessLayer
 				$_user_idUser = $this->getIdUser();
 				$_offset = $this->getRequest("offset");
 				$_limit = $this->getRequest("limit");
-				$_keyword = $this->getRequest("keyword");
-				
-				$params = array(
-								":user_idUser" => $_user_idUser,
-								":offset" => $_offset,
-								":limit" => $_limit,
-								":keyword" => '%'.$_keyword.'%'
-								);
+				$_keyword = $this->getRequest("keyword").'%';
 				
 				$query = "SELECT u.idUser,
 									u.firstname,
@@ -54,18 +47,25 @@ class FriendshipSearch extends BusinessLayer
 							ON (u.idUser = f.user_idUser
 								OR u.idUser = f.user_idFriend)
 						
-						WHERE u.firstname LIKE :keyword
-							OR u.lastname LIKE :keyboard
-							OR u.email LIKE :keyboard					
-						
-						GROUP BY idUser";
+						WHERE (u.firstname LIKE :key_firstname
+							OR u.lastname LIKE :key_lastname
+							OR u.email LIKE :key_email)
 							
-				if($_limit != null)
-					$query .= " LIMIT ".($_offset != null) ? ":offset, " : "".":limit;";
+							AND u.idUser = :user_idUser
+						
+						GROUP BY u.idUser
+						
+						LIMIT :offset, :limit";
 				
 				$statement = $this->m_db->prepare($query);
-				
-				if($statement && $statement->execute($params))
+				$statement->bindParam(':user_idUser', $_user_idUser, PDO::PARAM_INT);
+				$statement->bindParam(':key_firstname', $_keyword, PDO::PARAM_STR);
+				$statement->bindParam(':key_lastname', $_keyword, PDO::PARAM_STR);
+				$statement->bindParam(':key_email', $_keyword, PDO::PARAM_STR);
+				$statement->bindParam(':offset', $_offset, PDO::PARAM_INT);
+				$statement->bindParam(':limit', $_limit, PDO::PARAM_INT);
+							
+				if($statement && $statement->execute())
 				{
 					$this->addData($statement->fetchAll(PDO::FETCH_ASSOC));
 				}

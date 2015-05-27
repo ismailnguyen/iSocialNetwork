@@ -29,8 +29,7 @@ class PostLike extends BusinessLayer
 
 				$params = array(
 								":user_idUser" => $_user_idUser,
-								":post_idPost" => $_post_idPost,
-								":createdDate" => $_createdDate
+								":post_idPost" => $_post_idPost						
 								);
 
 				$statement = $this->m_db->prepare("SELECT * FROM post_like
@@ -61,6 +60,13 @@ class PostLike extends BusinessLayer
 				else
 				{
 					//Like
+					
+					$params = array(
+							":user_idUser" => $_user_idUser,
+							":post_idPost" => $_post_idPost,
+							":createdDate" => $_createdDate
+							);
+							
 					$statement = $this->m_db->prepare("INSERT INTO post_like
 														(
 															user_idUser,
@@ -73,7 +79,7 @@ class PostLike extends BusinessLayer
 															:user_idUser, 
 															:post_idPost, 
 															:createdDate
-														)");
+														)");				
 														
 					if($statement && $statement->execute($params))
 					{

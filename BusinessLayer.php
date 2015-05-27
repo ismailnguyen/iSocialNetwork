@@ -84,7 +84,8 @@ class BusinessLayer
 
 	public function addData($_data)
 	{
-		//array_push($this->m_data, $data);
+		if($_data == null)
+			$this->m_data["content"] = "null";
 		
 		foreach($_data as $_key => $_value)
 		{
