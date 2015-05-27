@@ -27,15 +27,7 @@ class PostMost extends BusinessLayer
 				$_offset = (int) $this->getRequest("offset");
 				$_limit = (int) $this->getRequest("limit");
 				
-				$params = array(
-								":user_idUser" => $_user_idUser,
-								":offset" => $_offset,
-								":limit" => $_limit
-								);
-				
-				SELECT * FROM User WHERE id_user = (SELECT id_user FROM Loan GROUP BY id_user ORDER BY COUNT(id_user) DESC LIMIT 1)
-				
-				$query = "SELECT p.idPost
+				$query = "SELECT p.idPost,
 									p.content,
 									p.createdDate
 						
@@ -53,14 +45,16 @@ class PostMost extends BusinessLayer
 											GROUP BY post_idPost
 											
 											ORDER BY COUNT(post_idPost) DESC
-											)";
-							
-				if($_limit != null)
-					$query .= " LIMIT ".($_offset != null) ? ":offset, " : "".":limit;";
+											)
+											
+						LIMIT :offset, :limit";
 				
 				$statement = $this->m_db->prepare($query);
+				$statement->bindParam(':user_idUser', $_user_idUser, PDO::PARAM_INT);
+				$statement->bindParam(':offset', $_offset, PDO::PARAM_INT);
+				$statement->bindParam(':limit', $_limit, PDO::PARAM_INT);
 				
-				if($statement && $statement->execute($params))
+				if($statement && $statement->execute())
 				{
 					$this->addData($statement->fetchAll(PDO::FETCH_ASSOC));
 				}
@@ -77,6 +71,7 @@ class PostMost extends BusinessLayer
 		catch(PDOException $e)
 		{
 			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			var_dump($e);
 			$this->setCode(13); // INTERNAL SERVER ERROR
 		}
 		catch(Exception $e)
