@@ -26,13 +26,7 @@ class FriendshipRead extends BusinessLayer
 				$_user_idUser = $this->getIdUser();
 				$_offset = $this->getRequest("offset");
 				$_limit = $this->getRequest("limit");
-				
-				$params = array(
-								":user_idUser" => $_user_idUser,
-								":offset" => $_offset,
-								":limit" => $_limit
-								);
-				
+
 				$query = "SELECT idUser,
 									firstname,
 									lastname,
@@ -44,24 +38,33 @@ class FriendshipRead extends BusinessLayer
 						FROM user
 						
 						WHERE idUser in (
-										SELECT user_idUser,
-												user_idFriend
+										SELECT user_idUser
+								
+										FROM friendship
+										
+										WHERE user_idFriend = :user_idUser
+										)
+							
+							OR idUser in (
+										SELECT user_idFriend
 								
 										FROM friendship
 										
 										WHERE user_idUser = :user_idUser
-											OR user_idFriend = :user_idUser
 										)
-						
-						GROUP BY idUser";
-							
-				if($_limit != null)
-					$query .= " LIMIT ".($_offset != null) ? ":offset, " : "".":limit;";
+															 
+						GROUP BY idUser
+					
+						LIMIT :offset, :limit";
 				
 				$statement = $this->m_db->prepare($query);
+				$statement->bindParam(':user_idUser', $_user_idUser, PDO::PARAM_INT);
+				$statement->bindParam(':offset', $_offset, PDO::PARAM_INT);
+				$statement->bindParam(':limit', $_limit, PDO::PARAM_INT);
 				
-				if($statement && $statement->execute($params))
+				if($statement->execute())
 				{
+					
 					$this->addData($statement->fetchAll(PDO::FETCH_ASSOC));
 				}
 				else
