@@ -27,26 +27,20 @@ class PostHashtag extends BusinessLayer
 				$_offset = (int) $this->getRequest("offset");
 				$_limit = (int) $this->getRequest("limit");
 				$_hashtag = str_replace('#', '', $this->getRequest("hashtag"));
-				
-				$params = array(
-								":user_idUser" => $_user_idUser,
-								":offset" => $_offset,
-								":limit" => $_limit,
-								":hashtag" => '%'.$_hashtag.'%'
-								);
+				$_hashtag = '%'.$_hashtag.'%';
 				
 				$query = "SELECT p.idPost,
-									p.user_idUser
+									p.user_idUser,
 									p.content,
 									p.createdDate
 						
-						FROM post
+						FROM post p
 						
 						INNER JOIN comment c
 							ON c.post_idPost = p.idPost
 						
 						INNER JOIN comment_tag t
-							ON t.comment_idTag = c.idComment
+							ON t.comment_idComment = c.idComment
 						
 						WHERE t.user_idFriend = (
 												SELECT idUser
@@ -57,22 +51,25 @@ class PostHashtag extends BusinessLayer
 													OR lastname = :hashtag
 													OR email = :hashtag
 												)
-							AND (user_idUser = :user_idUser 
-								OR user_idUser in
+							AND (t.user_idUser = :user_idUser 
+								OR t.user_idUser in
 												(
 													SELECT user_idFriend
 													
 													FROM friendship
 													
 													WHERE user_idUser = :user_idUser
-												))";
+												))
 							
-				if($_limit != null)
-					$query .= " LIMIT ".($_offset != null) ? ":offset, " : "".":limit;";
+						LIMIT :offset, :limit";
 				
 				$statement = $this->m_db->prepare($query);
+				$statement->bindParam(':user_idUser', $_user_idUser, PDO::PARAM_INT);
+				$statement->bindParam(':offset', $_offset, PDO::PARAM_INT);
+				$statement->bindParam(':limit', $_limit, PDO::PARAM_INT);
+				$statement->bindParam(':hashtag', $_hashtag, PDO::PARAM_STR);
 				
-				if($statement && $statement->execute($params))
+				if($statement && $statement->execute())
 				{
 					$this->addData($statement->fetchAll(PDO::FETCH_ASSOC));
 				}
@@ -89,6 +86,7 @@ class PostHashtag extends BusinessLayer
 		catch(PDOException $e)
 		{
 			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
+			var_dump($e);
 			$this->setCode(13); // INTERNAL SERVER ERROR
 		}
 		catch(Exception $e)

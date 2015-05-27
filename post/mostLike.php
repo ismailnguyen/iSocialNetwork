@@ -71,7 +71,6 @@ class PostMost extends BusinessLayer
 		catch(PDOException $e)
 		{
 			if(DEBUG) $this->addData(array("msg" => $e->getMessage()));
-			var_dump($e);
 			$this->setCode(13); // INTERNAL SERVER ERROR
 		}
 		catch(Exception $e)
