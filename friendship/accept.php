@@ -26,40 +26,38 @@ class FriendshipAccept extends BusinessLayer
 				$_user_idUser = $this->getIdUser();
 				$_user_idFriend = $this->getRequest("idFriend");
 				$_createdDate = date("Y-m-d H:i:s"); // date of acceptation
-				$_state = 1; // 0: Invitation sent | 1: Invitation accepted
-				$_oldState = 0;
 
         		$params = array(
 								":user_idUser" => $_user_idUser,
-								":user_idFriend" => $_user_idFriend,
-								":createdDate" => $_createdDate,
-								":state" => $_state,
-								":oldState" => $_oldState
+								":user_idFriend" => $_user_idFriend
 								);
-				
+											
 				$statement = $this->m_db->prepare("SELECT *
 				
 													FROM friendship 
 													
-													WHERE user_idUser = :user_idUser
-														AND user_idFriend = :user_idFriend
-														AND state = :oldState");
+													WHERE user_idUser = :user_idFriend
+														AND user_idFriend = :user_idUser
+														AND state = 0");
+														
 				if($statement->execute($params)  && $statement->rowCount() == 1)
 				{
+					$_result = $statement->fetch(PDO::FETCH_ASSOC);
+					$_idFriendship = $_result['idFriendship'];
+					
 					$statement = $this->m_db->prepare("UPDATE friendship
 					
-														SET state = :state,
-															createdDate = :createdDate
+														SET state = 1,
+															createdDate = ?
 														
-														WHERE user_idUser = :user_idUser
-															AND user_idFriend = :user_idFriend
-															AND state = :oldState");
-					if($statement && $statement->execute($params))
+														WHERE idFriendship = ?");
+															
+					if($statement && $statement->execute(array($_createdDate, $_idFriendship)))
 					{
 						$this->setCode(3); // Accepted
 						
 						$this->addData(array(
-											"state" => $_state, 
+											"state" => 1, 
 											"createdDate" => $_createdDate
 											));
 					}

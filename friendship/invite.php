@@ -40,7 +40,9 @@ class FriendshipInvite extends BusinessLayer
 													WHERE ((user_idUser = :user_idUser AND user_idFriend = :user_idFriend)
 														OR (user_idUser = :user_idFriend AND user_idFriend = :user_idUser))");
 														
-				if($statement->execute($params) && $statement->rowCount() == 0)
+				if($statement->execute($params)
+					&& $statement->rowCount() == 0
+					&& $_user_idUser != $_user_idFriend)
 				{
 					$statement = $this->m_db->prepare("INSERT INTO friendship
 														(
