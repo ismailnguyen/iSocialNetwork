@@ -21,7 +21,7 @@ class NotificationRemove extends BusinessLayer
 	{
 		try
 		{
-			if($this->getMethod() == "DELETE")
+			if($this->getMethod() == "POST")
 	    	{
 				$_idNotification = $this->getRequest("idNotification");
 				$_user_idUser = $this->getIdUser();				

@@ -21,7 +21,7 @@ class AccountRemove extends BusinessLayer
 	{
 		try
 		{
-			if($this->getMethod() == "DELETE")
+			if($this->getMethod() == "POST")
 	    	{
 				$_user_idUser = $this->getIdUser();				
  
@@ -34,15 +34,15 @@ class AccountRemove extends BusinessLayer
 													
 													FROM post
 													
-													INNER JOIN post_like
+													LEFT JOIN post_like
 														ON post.idPost = post_like.post_idPost
-													INNER_JOIN post_tag
+													LEFT post_tag
 														ON post.idPost = post_tag.post_idPost
-													INNER JOIN comment
+													LEFT JOIN comment
 														ON post.idPost = comment.post_idPost
-													INNER JOIN comment_like
+													LEFT JOIN comment_like
 														ON comment.idComment = comment_like.comment_idComment
-													INNER JOIN comment_tag
+													LEFT JOIN comment_tag
 														ON comment.idComment = comment_tag.comment_idComment
 													
 													WHERE post.user_idUser = :idUser;
@@ -54,9 +54,9 @@ class AccountRemove extends BusinessLayer
 														
 													FROM comment
 													
-													INNER JOIN comment_like
+													LEFT JOIN comment_like
 														ON comment.idComment = comment_like.comment_idComment
-													INNER JOIN comment_tag
+													LEFT JOIN comment_tag
 														ON comment.idComment = comment_tag.comment_idComment
 													
 													WHERE comment.user_idUser = :idUser;

@@ -21,7 +21,7 @@ class CommentTagRemove extends BusinessLayer
 	{
 		try
 		{
-			if($this->getMethod() == "DELETE")
+			if($this->getMethod() == "POST")
 	    	{
 				$_idTag = $this->getRequest("idTag");
 				$_user_idUser = $this->getIdUser();				

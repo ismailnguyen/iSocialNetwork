@@ -21,7 +21,7 @@ class CommentRemove extends BusinessLayer
 	{
 		try
 		{
-			if($this->getMethod() == "DELETE")
+			if($this->getMethod() == "POST")
 	    	{
 				$_idComment = $this->getRequest("idComment");
 				$_User_idUser = $this->getIdUser();				
@@ -46,9 +46,9 @@ class CommentRemove extends BusinessLayer
 														
 														FROM comment
 														
-														INNER JOIN comment_like
+														LEFT JOIN comment_like
 															ON comment.idComment = comment_like.comment_idComment
-														INNER JOIN comment_tag
+														LEFT JOIN comment_tag
 															ON comment.idComment = comment_tag.comment_idComment
 														
 														WHERE comment.idComment = :idComment
